@@ -1,0 +1,10 @@
+package co.grandcircus.EmployeeApi.Repos;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import co.grandcircus.EmployeeApi.Model.Employee;
+
+public interface EmployeeRepository extends MongoRepository<Employee, String> {
+
+	Integer deleteByShiftId(Integer shiftId);
+}

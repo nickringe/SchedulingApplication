@@ -1,0 +1,83 @@
+package co.grandcircus.EmployeeApi.Model;
+
+import java.util.Date;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@Document("employees")
+public class Shift {
+
+	@Id
+	@JsonProperty("shiftId")
+	private Integer id;
+	private String shiftName;
+	@JsonFormat(pattern = "yyyy-MM-DD-HH:mm:SS")
+	private Date date;
+	@JsonFormat(pattern = "yyyy-MM-DD-HH:mm:SS")
+	private Date startTime;
+	@JsonFormat(pattern = "yyyy-MM-DD-HH:mm:SS")
+	private Date endTime;
+	private Double shiftLength;
+	
+
+	public Shift() {
+
+	}
+
+	public Shift(String shiftName, Date date, Date startTime, Date endTime) {
+		this.shiftName = shiftName;
+		this.date = date;
+		this.startTime = startTime;
+		this.endTime = endTime;
+	}
+
+	public String getShiftName() {
+		return shiftName;
+	}
+
+	public void setShiftName(String shiftName) {
+		this.shiftName = shiftName;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
+	public Double getShiftLength() {
+		return (double) ((endTime.getTime() - startTime.getTime()) / (1800000));
+	}
+
+	public Integer getShiftId() {
+		return id;
+	}
+
+	public void setShiftId(Integer id) {
+
+			this.id = id;
+		}
+
+	}
+

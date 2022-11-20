@@ -1,0 +1,28 @@
+package co.grandcircus.EmployeeApi.Controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
+
+import co.grandcircus.EmployeeApi.Model.Employee;
+import co.grandcircus.EmployeeApi.Repos.EmployeeRepository;
+
+@RestController
+public class EmployeeController {
+	
+	@Autowired
+	EmployeeRepository repo;
+	
+	@GetMapping("/")
+	public List<Employee> listAllEmployees(){
+		return repo.findAll();
+	}
+	
+	@GetMapping("/{id}")
+	public Employee getOneEmployee(@PathVariable("id") String id) {
+		return repo.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
+	}
+
+}

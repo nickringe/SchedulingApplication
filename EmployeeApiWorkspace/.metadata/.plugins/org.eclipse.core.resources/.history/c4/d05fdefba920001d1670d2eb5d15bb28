@@ -1,0 +1,30 @@
+package co.grandcircus.EmployeeApi.Model;
+
+import java.util.List;
+
+public class Schedule {
+private List<Shift> shiftList;
+private Double totalHours;
+	
+	public Schedule() {
+	}
+
+	public Schedule(List<Shift> shiftList) {
+		this.shiftList = shiftList;
+	}
+
+	public List<Shift> getShiftList() {
+		return shiftList;
+	}
+
+	public void setShiftList(List<Shift> shiftList) {
+		this.shiftList = shiftList;
+	}
+	
+	public Double getTotalHours() {
+		for(Shift shift: shiftList) {
+			totalHours+= shift.getShiftLength();
+		}
+		return totalHours;
+	}
+}

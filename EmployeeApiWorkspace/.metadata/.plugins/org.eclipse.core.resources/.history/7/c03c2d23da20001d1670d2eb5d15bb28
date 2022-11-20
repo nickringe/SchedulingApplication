@@ -1,0 +1,71 @@
+package co.grandcircus.EmployeeApi.Controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
+
+import co.grandcircus.EmployeeApi.EmployeeNotFoundException;
+import co.grandcircus.EmployeeApi.Model.Employee;
+import co.grandcircus.EmployeeApi.Model.Schedule;
+import co.grandcircus.EmployeeApi.Model.Shift;
+import co.grandcircus.EmployeeApi.Repos.EmployeeRepository;
+
+@RestController
+public class EmployeeController {
+	
+	@Autowired
+	EmployeeRepository repo;
+	
+	@GetMapping("/")
+	public List<Employee> listAllEmployees(){
+		return repo.findAll();
+	}
+	
+	@GetMapping("/{id}")
+	public Employee getOneEmployee(@PathVariable("id") String id) {
+		return repo.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
+	}
+	
+	@PostMapping("/") 
+	@ResponseStatus(HttpStatus.CREATED)
+	public Employee createEmployee(@RequestBody Employee employee) {
+		return repo.insert(employee);
+	}
+	
+	@DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteEmployee(@PathVariable("id")String id) {
+		repo.deleteById(id);
+	}
+	
+	@PutMapping("/{id}")
+	public Employee updateEmployee(@RequestBody Employee employee, @PathVariable("id") String id) {
+		employee.setId(id);
+		return repo.save(employee);
+	}
+	
+//	@PutMapping("/schedule/{id}")
+//	public void updateSchedule(@RequestBody Employee employee, @PathVariable("id") String id,
+//								@RequestBody Schedule schedule) {
+//		
+//	}
+	
+	@DeleteMapping("/shiftId")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteShift(@PathVariable Integer shiftId) {
+		System.out.println("OK");
+		
+			
+	}
+	@ResponseBody
+	@ExceptionHandler(EmployeeNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	String characterNotFoundHandler(EmployeeNotFoundException ex) {
+		return ex.getMessage();
+	}
+
+}

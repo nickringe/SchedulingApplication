@@ -1,0 +1,5 @@
+package co.grandcircus.EmployeeApi.Repos;
+
+public interface ShiftRepository {
+
+}
