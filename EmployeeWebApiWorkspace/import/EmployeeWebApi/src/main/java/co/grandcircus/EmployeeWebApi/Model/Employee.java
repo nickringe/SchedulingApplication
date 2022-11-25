@@ -2,6 +2,8 @@ package co.grandcircus.EmployeeWebApi.Model;
 
 import java.util.List;
 
+import co.grandcircus.EmployeeApi.Model.Shift;
+
 public class Employee {
 	
 	private String id;
@@ -22,6 +24,7 @@ public class Employee {
 		this.lastname = lastname;
 		this.email = email;
 		this.empId = empId;
+		
 	}
 	public String getId() {
 		return id;
@@ -66,10 +69,7 @@ public class Employee {
 		if (this.schedule == null) {
 			return 0.00;
 		}
-		totalHours = 0.00;
-		for (Shift s : schedule) {
-			totalHours+=s.getShiftLength();
-		}
+		
 		return totalHours;
 	}
 	

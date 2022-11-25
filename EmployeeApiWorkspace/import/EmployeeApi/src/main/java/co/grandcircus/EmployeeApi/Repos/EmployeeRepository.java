@@ -13,8 +13,8 @@ public interface EmployeeRepository extends MongoRepository<Employee, String> {
 	@Update("{$pull: {'schedule': {'id':?1}}}")
 	void updateById(String id, String shiftId);
 	
-	@Query("{'id': ?0}")
-	@Update("$push: {'schedule': {'schedule':'id': ObjectId(), 'shiftName':?1, 'date':?2, 'startTime':?3, 'endTime':?4}}}")
+	@Query("{'id':?0}")
+	@Update("{$push: {'schedule': {'_id': ObjectId(), 'shiftName':?1, 'date':?2, 'startTime':?3, 'endTime':?4}}}")
 	void updateById(String id, String shiftName, String date, String startTime, String endTime);
 	
 	
@@ -27,12 +27,13 @@ public interface EmployeeRepository extends MongoRepository<Employee, String> {
 //			"shiftName": "actualShiftNameHere",
 //			"date": "actualDateHere",
 //			"startTime": "actualStartTimeHere",
-//			"endTime": "actualEndTimeHere",
-//			"shiftLength": "actualShiftLengthHere"
+//			"endTime": "actualEndTimeHere"
 //		}
 //	}
 //		})
 	
+	
+	//********First method********
 	//db.employees.updateOne({
 //	  "_id": ObjectId("id")
 //	  },

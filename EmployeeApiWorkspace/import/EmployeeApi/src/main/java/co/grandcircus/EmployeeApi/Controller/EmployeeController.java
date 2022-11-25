@@ -68,12 +68,6 @@ public class EmployeeController {
 		repo.deleteById(id);
 	}
 	
-	@PutMapping("/{id}")
-	public Employee updateEmployee(@RequestBody Employee employee, @PathVariable("id") String id) {
-		employee.setId(id);
-		return repo.save(employee);
-	}
-	
 	
 	@DeleteMapping("/delete/{shiftId}/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
@@ -91,13 +85,17 @@ public class EmployeeController {
 			
 	}
 	
-	@PostMapping("/add-shift/{shiftId}/{id}/{shiftName}/{date}/{startTime}/{endTime}")
-	public void addEmployeeShift(@PathVariable String shiftId, @PathVariable String id, @PathVariable String shiftName,
-			@PathVariable String date, @PathVariable String startTime, @PathVariable String endTime) {
-		
-		System.out.println("1. Made it to 8080 API");
-		repo.updateById(id, shiftName, date, startTime, endTime);
-		
+	@PutMapping("/{id}")
+	public Employee updateEmployee(@RequestBody Employee employee, @PathVariable("id") String id) {
+		employee.setId(id);
+		return repo.save(employee);
+	}
+	
+	@PutMapping("/update/{id}")
+	public void updateEmployeeSchedule(@RequestBody Shift employeeShift, @PathVariable("id") String id) {
+		System.out.println("1. Made it to 8080 API... id: " + id);
+		repo.updateById(id, employeeShift.getShiftName(), employeeShift.getDate(), employeeShift.getStartTime(), employeeShift.getEndTime());
+		System.out.println("2. Made it through repo.updateById to end of 8080 API");
 	}
 	
 	

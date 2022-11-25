@@ -32,6 +32,60 @@ public class EmployeeHomeController {
 		return "index";
 	}
 	
+	@RequestMapping("/create-shift")
+	public String showCreateShift(Model model) {
+		
+		
+		
+		model.addAttribute("employees", service.getAllEmployees());
+		return "create-shift";
+	}
+	
+	//this happens when User creates a brand new shift, to be put on either Master Schedule or given to a specific employee
+	@PostMapping("/add-created-shift")
+	public String addCreatedShift(Model model, @RequestParam(required = false) String id,
+			@RequestParam(required = false) String shiftName, @RequestParam(required = false) String date,
+			@RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime) {
+		
+		String shiftAdded = "Shift added";
+		
+		System.out.println("1. Got to initial method");
+		//if id is null, add to master schedule
+		if (id == null) {
+			Employee master = service.getEmployee("634c155f245151700ec73b89");
+			List<Shift> masterSchedule = master.getSchedule();
+			//
+			Shift newShift = new Shift(shiftName, date, startTime, endTime);
+			//masterSchedule.add(newShift);
+			//master.setSchedule(masterSchedule);
+			
+			System.out.println("1.");
+			//service.updateEmployee("634c155f245151700ec73b89", master);
+			service.updateEmployeeSchedule(newShift, "634c155f245151700ec73b89");
+			
+			model.addAttribute("employees", service.getAllEmployees());
+			model.addAttribute("shiftAdded", shiftAdded);
+			
+			
+			return "create-shift";
+		}
+		System.out.println("2. Got to employee portion");
+		//else add to employee's schedule
+		Employee employee = service.getEmployee(id);
+		//List<Shift> employeeSchedule = employee.getSchedule();
+		Shift newEmployeeShift = new Shift(shiftName, date, startTime, endTime);
+//		employeeSchedule.add(newEmployeeShift);
+//		employee.setSchedule(employeeSchedule);
+		
+		//service.updateEmployee(id, employee);
+		service.updateEmployeeSchedule(newEmployeeShift, employee.getId());
+		System.out.println("3. Got past the service method");
+		
+		model.addAttribute("employees", service.getAllEmployees());
+		model.addAttribute("shiftAdded", shiftAdded);
+		return "create-shift";
+	}
+	
 	@RequestMapping("/1")
 	public String showEmployees1(Model model) {
 
@@ -97,9 +151,9 @@ public class EmployeeHomeController {
 		return "schedule";
 	}
 
+	//deletes a given shift
 	@RequestMapping("/remove")
 	public String deleteShift(@RequestParam String shiftId, @RequestParam String id) {
-		System.out.println("1. Home Controller - next should be service.deleteShift(shiftId, id)");
 		service.deleteShift(shiftId, id);
 		return "redirect:/schedule?id=" + id;
 	}
@@ -200,6 +254,7 @@ public class EmployeeHomeController {
 		}
 	}
 	
+	//Displays all open shifts on Master Schedule
 	@GetMapping("/master")
 	public String viewMasterSchedule(Model model) {
 		Employee masterEmployee = service.getEmployee("634c155f245151700ec73b89");
@@ -213,6 +268,7 @@ public class EmployeeHomeController {
 		return "master";
 	}
 	
+	//This method is where someone picks up a shift that is already created on the Master Schedule
 	@PostMapping("/add-to-schedule")
 	public String addShiftToEmployee(Model model, @RequestParam(required = false) String id,
 			@RequestParam(required = false) String shiftId, @RequestParam(required = false) String shiftName,
@@ -226,13 +282,20 @@ public class EmployeeHomeController {
 		Employee master = service.getEmployee("634c155f245151700ec73b89");
 		
 		List<Shift> employeeShifts = employee.getSchedule();
-		System.out.println("1");
+		List<Shift> masterSchedule = master.getSchedule();
+		
+		//looks for the shift user wants then adds it to the employee's schedule. Then removes it from the master schedule
 		for (Shift shift : master.getSchedule()) {
 			if (shift.getId().equals(shiftId)) {
 				employeeShifts.add(shift);
+				masterSchedule.remove(shift);
 				System.out.println("2");
-				service.addShift(shiftId, id, shiftName, date, startTime, endTime);
-				//service.deleteShift(shiftId, "634c155f245151700ec73b89");
+				employee.setSchedule(employeeShifts);
+				master.setSchedule(masterSchedule);
+				service.updateEmployee(id, employee);
+				service.updateEmployee("634c155f245151700ec73b89", master);
+				break;
+				
 			}
 		}
 

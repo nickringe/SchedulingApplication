@@ -2,6 +2,7 @@ package co.grandcircus.EmployeeWebApi.Model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class Shift {
 	
@@ -29,6 +30,7 @@ public class Shift {
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
+		this.shiftLength = (double) ChronoUnit.HOURS.between(LocalDateTime.parse(startTime), LocalDateTime.parse(endTime));
 	}
 
 	public String getShiftName() {
@@ -71,6 +73,9 @@ public class Shift {
 	}
 
 	public Double getShiftLength() {
+		if (shiftLength == null) {
+			return 0.00;
+		}
 		return shiftLength;
 	}
 

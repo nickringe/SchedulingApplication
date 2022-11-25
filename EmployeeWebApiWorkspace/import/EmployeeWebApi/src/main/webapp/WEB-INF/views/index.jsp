@@ -33,7 +33,8 @@
 				<td>${emp.empId}</td>
 				<td><a href="/schedule?id=${emp.id}">View Schedule</a></td>
 				<td><a href="/form?id=${emp.id}">Update Employee Info</a></td>
-				<td><button onclick="myFunction()" type="button" class="btn-danger">Delete</button>
+				<td><a href="/delete?id=${emp.id}">Delete Employee</a></td>
+				<!-- <td><button onclick="myFunction()" type="button" class="btn-danger">Delete</button>
 				<script>
 					function myFunction() {
   						if (confirm("Are you sure you want to delete this employee?")) {
@@ -41,7 +42,7 @@
   							} 
 						}
 				</script>
-				</td>
+				</td> -->
 				
 			</tr>
 		
@@ -63,5 +64,6 @@
 	
 
 	<a href="/master" class="btn btn-info">View Open Shifts</a>	
+	<a href="/create-shift" class="btn btn-info">Create New Shifts</a>
 </body>
 </html>

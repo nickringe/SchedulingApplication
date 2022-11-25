@@ -2,6 +2,7 @@ package co.grandcircus.EmployeeApi.Model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 //web api model (8080)
 public class Shift {
@@ -21,6 +22,12 @@ public class Shift {
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
+		if(shiftLength == null) {
+			this.shiftLength = 0.00;
+		} else {
+			
+			this.shiftLength = (double) ChronoUnit.HOURS.between(LocalDateTime.parse(startTime), LocalDateTime.parse(endTime));
+		}
 		
 	}
 	

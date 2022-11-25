@@ -26,6 +26,8 @@ public class Employee {
 		this.lastname = lastname;
 		this.email = email;
 		this.empId = empId;
+		
+		
 	}
 //	public Employee(String firstname, String lastname, String email, String empId, List<Shift> schedule) {
 //		this.firstname = firstname;
@@ -77,10 +79,7 @@ public class Employee {
 		if (this.schedule == null) {
 			return 0.00;
 		}
-		totalHours = 0.00;
-		for (Shift s : schedule) {
-			totalHours+=s.getShiftLength();
-		}
+		
 		return totalHours;
 	}
 	
