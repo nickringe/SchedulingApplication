@@ -26,8 +26,9 @@
 
 	
 	<h2 class="text-center">Employees</h2>
+	<div class="child"><h3> ${empIdAlreadyExists}</h3></div>
 	<div class="box">
-		<c:if test="${not empty empIdAlreadyExists }">Employee ID already exists</c:if>
+
 		<table class="table">
 			<tr>
 				<th class="text-center">Name</th>
@@ -46,7 +47,13 @@
 					<td class="text-center">${emp.empId}</td>
 					<td class="text-center"><a href="/schedule?id=${emp.id}"><i class="fa-solid fa-eye"></i></a></td>
 					<td class="text-center"><a href="/form?id=${emp.id}"><i class="fa-solid fa-pencil"></i></a> </td>
-					<td class="text-center"><a href="/delete?id=${emp.id}"><i class="fa-solid fa-trash"></i></a></td>
+					<td class="text-center">
+						<form action="confirm-delete">
+							<input type="hidden" value="${emp.id }" name="id" id="id">
+							<input type="submit" value="Delete" class="btn btn-danger">
+						</form>
+					</td>
+					<%-- <td class="text-center"><a href="/delete?id=${emp.id}"><i class="fa-solid fa-trash"></i></a></td> --%>
 						<!-- <td><button onclick="myFunction()" type="button" class="btn-danger">Delete</button>
 						<script>
 							function myFunction() {

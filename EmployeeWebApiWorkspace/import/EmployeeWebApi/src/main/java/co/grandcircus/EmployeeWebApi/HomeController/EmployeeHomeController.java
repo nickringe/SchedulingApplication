@@ -35,8 +35,6 @@ public class EmployeeHomeController {
 	@RequestMapping("/create-shift")
 	public String showCreateShift(Model model) {
 		
-		
-		
 		model.addAttribute("employees", service.getAllEmployees());
 		return "create-shift";
 	}
@@ -106,16 +104,21 @@ public class EmployeeHomeController {
 			@RequestParam(required = false) String firstname, @RequestParam(required = false) String lastname,
 			@RequestParam(required = false) String email, @RequestParam(required = false) String empId) {
 		
+		//do nothing if employee ID already exists
 		for (Employee emp : service.getAllEmployees()) {
 
 			if (emp.getEmpId().equals(empId)) {
+				String empIdAlreadyExists = "- Employee ID already exists -";
+				model.addAttribute("empIdAlreadyExists", empIdAlreadyExists);
 
 				return "redirect:/1";
 			}
 		}
 	
+		//add and save new employee
 		Employee employee = new Employee(firstname, lastname, email, empId);
 		service.addEmployee(employee);
+		
 		return "redirect:/";
 	}
 
@@ -306,5 +309,17 @@ public class EmployeeHomeController {
 			model.addAttribute("shifts", employee.getSchedule());
 		
 		return "add-shift";
+	}
+	
+	@RequestMapping("/confirm-delete")
+	public String confirmDelete(Model model, @RequestParam String id) {
+		
+		Employee employee = service.getEmployee(id);
+		model.addAttribute("id", employee.getId());
+		model.addAttribute("firstname", employee.getFirstname());
+		model.addAttribute("lastname", employee.getLastname());
+		
+		
+		return "confirm-delete";
 	}
 }
