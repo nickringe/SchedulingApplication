@@ -1,0 +1,59 @@
+@charset "ISO-8859-1";
+
+.box {
+	background-color:#e6eeff;
+	display:flex;
+	width: 44%;
+	justify-content: space-between;
+	align-items: center;
+	border-radius: 20px;
+	padding: 10px auto;
+	margin: 33px auto;
+}
+
+.boxCenter {
+	background-color:#e6eeff;
+	display:flex;
+	border-radius: 20px;
+	padding: 10px auto;
+	margin: 15px auto;
+	align-items: center;
+	justify-content: center;
+	width: 75%;
+}
+
+.boxCenterThin {
+	background-color:#e6eeff;
+	display:flex;
+	border-radius: 20px;
+	padding: 10px auto;
+	margin: 15px auto;
+	align-items: center;
+	justify-content: center;
+	width: 40%;
+}
+
+.child {
+	margin: 0 auto;
+	display: flex;
+	justify-content: center;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.header {
+	display: flex;
+	height: 100px;
+	color: #FFFFFF;
+	align-items: center;
+	justify-content: center;
+	background: rgb(2,0,36);
+	background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,68,204,1) 64%, rgba(230,238,255,1) 100%);
+	border-style: outset;
+	border-color: black;
+	border-width: 3px;
+	
+	
+}

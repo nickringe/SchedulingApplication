@@ -14,7 +14,7 @@ public interface EmployeeRepository extends MongoRepository<Employee, String> {
 	void updateById(String id, String shiftId);
 	
 	@Query("{'id':?0}")
-	@Update("{$push: {'schedule': {'_id': ObjectId(), 'shiftName':?1, 'date':?2, 'startTime':?3, 'endTime':?4}}}")
+	@Update("{$push: {'schedule': {'_id': ObjectId, 'shiftName':?1, 'date':?2, 'startTime':?3, 'endTime':?4}}}")
 	void updateById(String id, String shiftName, String date, String startTime, String endTime);
 	
 	
