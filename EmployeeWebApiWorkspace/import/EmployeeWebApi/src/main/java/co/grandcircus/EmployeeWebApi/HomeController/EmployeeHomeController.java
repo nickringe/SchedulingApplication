@@ -117,6 +117,8 @@ public class EmployeeHomeController {
 	
 		//add and save new employee
 		Employee employee = new Employee(firstname, lastname, email, empId);
+		List<Shift> employeeSchedule = new ArrayList<>();
+		employee.setSchedule(employeeSchedule);
 		service.addEmployee(employee);
 		
 		return "redirect:/";
@@ -312,7 +314,7 @@ public class EmployeeHomeController {
 	}
 	
 	@RequestMapping("/confirm-delete")
-	public String confirmDelete(Model model, @RequestParam String id) {
+	public String confirmDelete(Model model, @RequestParam(required=false) String id) {
 		
 		Employee employee = service.getEmployee(id);
 		model.addAttribute("id", employee.getId());
@@ -321,5 +323,27 @@ public class EmployeeHomeController {
 		
 		
 		return "confirm-delete";
+	}
+	
+	@RequestMapping("/confirm-delete-shift")
+	public String confirmDeleteShift(Model model, @RequestParam(required=false) String id, 
+			@RequestParam(required=false) String shiftId, @RequestParam(required=false) String shiftName,
+			@RequestParam(required=false) String date, @RequestParam(required=false) String startTime,
+			@RequestParam(required=false) String endTime, @RequestParam(required=false) String shiftLength) {
+		
+		Employee employee = service.getEmployee(id);
+		String shiftRemoved = shiftName + " Shift Deleted";
+		model.addAttribute("shiftRemoved", shiftRemoved);
+		model.addAttribute("firstname", employee.getFirstname());
+		model.addAttribute("shiftname", shiftName);
+		model.addAttribute("date", date);
+		model.addAttribute("startTime", startTime);
+		model.addAttribute("endTime", endTime);
+		model.addAttribute("shiftLength", shiftLength);
+		model.addAttribute("shiftId", shiftId);
+		model.addAttribute("id", id);
+		
+		
+		return "confirm-delete-shift";
 	}
 }

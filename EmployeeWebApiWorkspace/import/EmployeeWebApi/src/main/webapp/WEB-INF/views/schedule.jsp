@@ -19,6 +19,7 @@
 			<a href="/" class="btn btn-info">Home</a>
 			<a href="" class="btn btn-info">View Open Shifts</a>	
 			<a href="/create-shift" class="btn btn-info">Create New Shifts</a> <br><br>
+			<div class="text-center"><h3>${shiftRemoved}</h3></div>
 			<h2>Schedule for ${employee.firstname} ${employee.lastname}</h2>
 		</div>
 		<div class="child">
@@ -33,6 +34,7 @@
 					<th>Start Time:</th>
 					<th>End Time:</th>
 					<th>Shift Length (Hours):</th>
+					<th>Delete</th>
 				</tr>
 
 				<c:forEach var="shift" items="${employee.schedule}">
@@ -42,7 +44,19 @@
 						<td>${shift.startTimeString}</td>
 						<td>${shift.endTimeString}</td>
 						<td>${shift.shiftLength}</td>
-						<td><a href="/remove?shiftId=${shift.id}&id=${employee.id}">Delete Shift</a></td>
+						<td>
+							<form action="/confirm-delete-shift">
+								<input type="hidden" value="${employee.id }" name="id" id="id">
+								<input type="hidden" value="${shift.id }" name="shiftId" id="shiftId">
+								<input type="hidden" value="${shift.shiftName }" name="shiftName" id="shiftName">
+								<input type="hidden" value="${shift.dateString }" name="date" id="date">
+								<input type="hidden" value="${shift.startTimeString }" name="startTime" id="startTime">
+								<input type="hidden" value="${shift.endTimeString }" name="endTime" id="endTime">
+								<input type="hidden" value="${shift.shiftLength }" name="shiftLength" id="shiftLength">
+							<input type="submit" value="Delete" class="btn btn-danger">
+							</form>
+						</td>
+						<%-- <td><a href="/remove?shiftId=${shift.id}&id=${employee.id}">Delete Shift</a></td> --%>
 					<!-- <td><button onclick="myFunction()" type="button" class="btn btn-danger">Delete Shift</button>
 						<script>
 							function myFunction() {

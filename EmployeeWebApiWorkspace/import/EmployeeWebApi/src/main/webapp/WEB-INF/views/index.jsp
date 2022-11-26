@@ -24,7 +24,7 @@
 		<a href="/create-shift" class="btn btn-info">Create New Shifts</a>
 	</div>
 
-	
+	<br>
 	<h2 class="text-center">Employees</h2>
 	<div class="child"><h3> ${empIdAlreadyExists}</h3></div>
 	<div class="box">
