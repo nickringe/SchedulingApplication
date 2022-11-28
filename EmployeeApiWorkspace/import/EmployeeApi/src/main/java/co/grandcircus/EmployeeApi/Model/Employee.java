@@ -17,6 +17,15 @@ public class Employee implements Comparator<Employee> {
 	private String empId;
 	private List<Shift> schedule;
 	private Double totalHours;
+	private String mainPhone;
+	private String otherPhone;
+	private String streetAddress;
+	private String city;
+	private String state;
+	private String zipcode;
+	private Double payRate;
+	private String emergencyContact;
+	private String emergencyPhone;
 
 	public Employee() {
 		
@@ -30,13 +39,7 @@ public class Employee implements Comparator<Employee> {
 		
 		
 	}
-//	public Employee(String firstname, String lastname, String email, String empId, List<Shift> schedule) {
-//		this.firstname = firstname;
-//		this.lastname = lastname;
-//		this.email = email;
-//		this.empId = empId;
-//		this.schedule = schedule;
-//	}
+
 	public String getId() {
 		return id;
 	}
@@ -80,7 +83,6 @@ public class Employee implements Comparator<Employee> {
 		if (this.schedule == null) {
 			return 0.00;
 		}
-
 		return totalHours;
 	}
 	
@@ -89,9 +91,81 @@ public class Employee implements Comparator<Employee> {
 	}
 
 
+	public String getMainPhone() {
+		return mainPhone;
+	}
+
+	public void setMainPhone(String mainPhone) {
+		this.mainPhone = mainPhone;
+	}
+
+	public String getOtherPhone() {
+		return otherPhone;
+	}
+
+	public void setOtherPhone(String otherPhone) {
+		this.otherPhone = otherPhone;
+	}
+
+	public String getStreetAddress() {
+		return streetAddress;
+	}
+
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = streetAddress;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getZipcode() {
+		return zipcode;
+	}
+
+	public void setZipcode(String zipcode) {
+		this.zipcode = zipcode;
+	}
+
+	public Double getPayRate() {
+		return payRate;
+	}
+
+	public void setPayRate(Double payRate) {
+		this.payRate = payRate;
+	}
+
+	public String getEmergencyContact() {
+		return emergencyContact;
+	}
+
+	public void setEmergencyContact(String emergencyContact) {
+		this.emergencyContact = emergencyContact;
+	}
+
+	public String getEmergencyPhone() {
+		return emergencyPhone;
+	}
+
+	public void setEmergencyPhone(String emergencyPhone) {
+		this.emergencyPhone = emergencyPhone;
+	}
+
 	@Override
 	public int compare(Employee o1, Employee o2) {
-		// TODO Auto-generated method stub
+		//sorts employees by last name
 		return o2.getLastname().compareTo(o1.getLastname());
 	}
 	

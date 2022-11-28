@@ -30,15 +30,17 @@
 		<br>
 		<div class="bold">First Name: </div>${employee.firstname}<br><br>
 		<div class="bold">Last Name:  </div>${employee.lastname}<br><br>
-		<div class="bold">Employee Id: </div>${employee.empId}<br><br>
 		<div class="bold">Email: </div>${employee.email}<br><br>
-		<div class="bold">Main Phone: </div><br><br>
-		<div class="bold">Other Phone: </div><br><br>
-		<div class="bold">Street Address: </div><br><br>
-		<div class="bold">City: </div><br><br>
-		<div class="bold">State: </div><br><br>
-		<div class="bold">Zip Code: </div><br><br>
-		<div class="bold">Pay Rate: </div><br>
+		<div class="bold">Employee Id: </div>${employee.empId}<br><br>
+		<div class="bold">Main Phone: </div>${employee.mainPhone}<br><br>
+		<div class="bold">Other Phone: </div>${employee.otherPhone}<br><br>
+		<div class="bold">Street Address: </div> ${employee.streetAddress}<br><br>
+		<div class="bold">City: </div> ${employee.city}<br><br>
+		<div class="bold">State: </div>${employee.state}<br><br>
+		<div class="bold">Zip Code: </div>${employee.zipcode}<br><br>
+		<div class="bold">Pay Rate: </div>${employee.payRate}<br><br>
+		<div class="bold">Emergency Contact: </div>${employee.emergencyContact}<br><br>
+		<div class="bold">Emergency Phone: </div>${employee.emergencyPhone}<br>
 		</div>
 	</body>
 </html>

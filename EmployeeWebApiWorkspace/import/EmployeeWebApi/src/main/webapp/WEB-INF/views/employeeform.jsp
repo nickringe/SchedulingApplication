@@ -31,8 +31,18 @@ pageEncoding="ISO-8859-1"%>
 				<div class="bold">First Name: </div><input type="text" value="${employee.firstname}" name="firstname"><br><br>
 				<div class="bold">Last Name: </div><input type="text" value="${employee.lastname}" name="lastname"><br><br>
 				<div class="bold">Email Address:</div> <input type="text" value="${employee.email}" name="email"><br><br>
-				<div class="bold">Employee ID:</div> <input type="text" value="${employee.empId}" name="empId"><br><br>
-				<%-- <input type="hidden" value="${employee.schedule}" name="schedule" id="schedule"><br><br> --%>
+				<div class="bold">Employee Id:</div> <input type="text" value="${employee.empId}" name="empId"><br><br>
+				<div class="bold">Main Phone:</div> <input type="text" value="${employee.mainPhone}" name="mainPhone"><br><br>
+				<div class="bold">Other Phone:</div> <input type="text" value="${employee.otherPhone}" name="otherPhone"><br><br>
+				<div class="bold">Street Address:</div> <input type="text" value="${employee.streetAddress}" name="streetAddress"><br><br>
+				<div class="bold">City:</div> <input type="text" value="${employee.city}" name="city"><br><br>
+				<div class="bold">State:</div> <input type="text" value="${employee.state}" name="state"><br><br>
+				<div class="bold">Zip Code:</div> <input type="text" value="${employee.zipcode}" name="zipcode"><br><br>
+				<div class="bold">Pay Rate:</div> <input type="text" value="${employee.payRate}" name="payRate"><br><br>
+				<div class="bold">Emergency Contact:</div> <input type="text" value="${employee.emergencyContact}" name="emergencyContact"><br><br>
+				<div class="bold">Emergency Phone:</div> <input type="text" value="${employee.emergencyPhone}" name="emergencyPhone"><br><br>
+				
+				
 					<div class="child">
 						<input type="submit" class="btn-success" value="Save Changes"> &nbsp;&nbsp;&nbsp;
 						<button onclick="window.location.href='/'" type="button" class="btn-danger">Cancel</button>

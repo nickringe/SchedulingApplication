@@ -112,7 +112,12 @@ public class EmployeeHomeController {
 	@PostMapping("/add")
 	public String addEmployee(Model model, @RequestParam(required = false) String id,
 			@RequestParam(required = false) String firstname, @RequestParam(required = false) String lastname,
-			@RequestParam(required = false) String email, @RequestParam(required = false) String empId) {
+			@RequestParam(required = false) String email, @RequestParam(required = false) String empId,
+			@RequestParam(required = false) String mainPhone, @RequestParam(required = false) String otherPhone,
+			@RequestParam(required = false) String streetAddress, @RequestParam(required = false) String city,
+			@RequestParam(required = false) String state, @RequestParam(required = false) String zipcode,
+			@RequestParam(required = false) Double payRate, @RequestParam(required = false) String emergencyContact,
+			@RequestParam(required = false) String emergencyPhone) {
 		
 		//do nothing if employee ID already exists
 		for (Employee emp : service.getAllEmployees()) {
@@ -130,6 +135,35 @@ public class EmployeeHomeController {
 		List<Shift> employeeSchedule = new ArrayList<>();
 		employee.setSchedule(employeeSchedule);
 		employee.setTotalHours(0.00);
+		
+		//check to see if any other fields were updated
+		if(mainPhone != null) {
+			employee.setMainPhone(mainPhone);
+		}
+		if(otherPhone != null) {
+			employee.setOtherPhone(otherPhone);
+		}
+		if(streetAddress != null) {
+			employee.setStreetAddress(streetAddress);
+		}
+		if(city != null) {
+			employee.setCity(city);
+		}
+		if(state != null) {
+			employee.setState(state);
+		}
+		if(zipcode != null) {
+			employee.setZipcode(zipcode);
+		}
+		if(payRate != null) {
+			employee.setPayRate(payRate);
+		}
+		if(emergencyContact != null) {
+			employee.setEmergencyContact(emergencyContact);
+		}
+		if(emergencyPhone != null) {
+			employee.setEmergencyPhone(emergencyPhone);
+		}
 		service.addEmployee(employee);
 		
 		return "redirect:/";
@@ -144,12 +178,46 @@ public class EmployeeHomeController {
 	@PostMapping("/postEmployee")
 	public String saveEmployee(Model model, @RequestParam(required = false) String id,
 			@RequestParam(required = false) String firstname, @RequestParam(required = false) String lastname,
-			@RequestParam(required = false) String email, @RequestParam(required = false) String empId) {
+			@RequestParam(required = false) String email, @RequestParam(required = false) String empId,
+			@RequestParam(required = false) String mainPhone, @RequestParam(required = false) String otherPhone,
+			@RequestParam(required = false) String streetAddress, @RequestParam(required = false) String city,
+			@RequestParam(required = false) String state, @RequestParam(required = false) String zipcode,
+			@RequestParam(required = false) Double payRate, @RequestParam(required = false) String emergencyContact,
+			@RequestParam(required = false) String emergencyPhone) {
 		Employee employee = service.getEmployee(id);
 		employee.setFirstname(firstname);
 		employee.setLastname(lastname);
 		employee.setEmail(email);
 		employee.setEmpId(empId);
+		
+		//check to see if any other fields were updated
+				if(mainPhone != null) {
+					employee.setMainPhone(mainPhone);
+				}
+				if(otherPhone != null) {
+					employee.setOtherPhone(otherPhone);
+				}
+				if(streetAddress != null) {
+					employee.setStreetAddress(streetAddress);
+				}
+				if(city != null) {
+					employee.setCity(city);
+				}
+				if(state != null) {
+					employee.setState(state);
+				}
+				if(zipcode != null) {
+					employee.setZipcode(zipcode);
+				}
+				if(payRate != null) {
+					employee.setPayRate(payRate);
+				}
+				if(emergencyContact != null) {
+					employee.setEmergencyContact(emergencyContact);
+				}
+				if(emergencyPhone != null) {
+					employee.setEmergencyPhone(emergencyPhone);
+				}
 		service.updateEmployee(id, employee);
 		return "redirect:/";
 	}
