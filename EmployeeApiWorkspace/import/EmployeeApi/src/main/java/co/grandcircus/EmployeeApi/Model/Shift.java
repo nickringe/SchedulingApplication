@@ -21,24 +21,17 @@ public class Shift {
 		this.shiftName = shiftName;
 		this.date = date;
 		this.startTime = startTime;
-		this.endTime = endTime;
-		if(shiftLength == null) {
-			this.shiftLength = 0.00;
-		} else {
-			
-			this.shiftLength = (double) ChronoUnit.HOURS.between(LocalDateTime.parse(startTime), LocalDateTime.parse(endTime));
-		}
-		
+		this.endTime = endTime;		
 	}
 	
-	public Shift(String id, String shiftName, String date, String startTime, String endTime, Double shiftLength) {
-		this.id = id;
-		this.shiftName = shiftName;
-		this.date = date;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.shiftLength = shiftLength;
-	}
+//	public Shift(String id, String shiftName, String date, String startTime, String endTime, Double shiftLength) {
+//		this.id = id;
+//		this.shiftName = shiftName;
+//		this.date = date;
+//		this.startTime = startTime;
+//		this.endTime = endTime;
+//		this.shiftLength = shiftLength;
+//	}
 
 	public String getShiftName() {
 		return shiftName;

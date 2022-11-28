@@ -1,12 +1,13 @@
 package co.grandcircus.EmployeeApi.Model;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("employees")
-public class Employee {
+public class Employee implements Comparator<Employee> {
 	
 	@Id
 	private String id;
@@ -79,9 +80,22 @@ public class Employee {
 		if (this.schedule == null) {
 			return 0.00;
 		}
-		
+
 		return totalHours;
 	}
+	
+	public void setTotalHours(Double totalHours) {
+		this.totalHours = totalHours;
+	}
+
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		// TODO Auto-generated method stub
+		return o2.getLastname().compareTo(o1.getLastname());
+	}
+	
+	
 	
 	
 

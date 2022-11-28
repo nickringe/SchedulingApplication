@@ -1,10 +1,11 @@
 package co.grandcircus.EmployeeWebApi.Model;
 
+import java.util.Comparator;
 import java.util.List;
 
-import co.grandcircus.EmployeeApi.Model.Shift;
+//import co.grandcircus.EmployeeApi.Model.Shift;
 
-public class Employee {
+public class Employee implements Comparator<Employee> {
 	
 	private String id;
 	private String firstname;
@@ -66,11 +67,25 @@ public class Employee {
 	}
 	
 	public Double getTotalHours() {
+		totalHours = 0.00;
 		if (this.schedule == null) {
 			return 0.00;
 		}
-		
+		for (Shift shift : this.schedule) {
+			totalHours += shift.getShiftLength();
+		}
 		return totalHours;
+	}
+	
+	public void setTotalHours(Double totalHours) {
+		this.totalHours = totalHours;
+	}
+
+
+	@Override
+	public int compare(Employee o1, Employee o2) {
+		// TODO Auto-generated method stub
+		return o2.getLastname().compareTo(o1.getLastname());
 	}
 	
 

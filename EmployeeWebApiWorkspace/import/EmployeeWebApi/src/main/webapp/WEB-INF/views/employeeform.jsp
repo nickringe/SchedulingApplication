@@ -32,6 +32,7 @@ pageEncoding="ISO-8859-1"%>
 				<div class="bold">Last Name: </div><input type="text" value="${employee.lastname}" name="lastname"><br><br>
 				<div class="bold">Email Address:</div> <input type="text" value="${employee.email}" name="email"><br><br>
 				<div class="bold">Employee ID:</div> <input type="text" value="${employee.empId}" name="empId"><br><br>
+				<%-- <input type="hidden" value="${employee.schedule}" name="schedule" id="schedule"><br><br> --%>
 					<div class="child">
 						<input type="submit" class="btn-success" value="Save Changes"> &nbsp;&nbsp;&nbsp;
 						<button onclick="window.location.href='/'" type="button" class="btn-danger">Cancel</button>

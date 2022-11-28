@@ -3,7 +3,10 @@ package co.grandcircus.EmployeeWebApi.HomeController;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +30,14 @@ public class EmployeeHomeController {
 
 	@RequestMapping("/")
 	public String showEmployees(Model model) {
-
+		
+		ArrayList<Employee> sortedList = new ArrayList<>();
+		for (Employee employee : service.getAllEmployees()) {
+			sortedList.add(employee);
+		}
+		Collections.sort(sortedList, Comparator.comparing(Employee::getLastname));
+		
+		model.addAttribute("sortedList", sortedList);
 		model.addAttribute("employees", service.getAllEmployees());
 		return "index";
 	}
@@ -119,6 +129,7 @@ public class EmployeeHomeController {
 		Employee employee = new Employee(firstname, lastname, email, empId);
 		List<Shift> employeeSchedule = new ArrayList<>();
 		employee.setSchedule(employeeSchedule);
+		employee.setTotalHours(0.00);
 		service.addEmployee(employee);
 		
 		return "redirect:/";
@@ -133,14 +144,12 @@ public class EmployeeHomeController {
 	@PostMapping("/postEmployee")
 	public String saveEmployee(Model model, @RequestParam(required = false) String id,
 			@RequestParam(required = false) String firstname, @RequestParam(required = false) String lastname,
-			@RequestParam(required = false) String email, @RequestParam(required = false) String empId,
-			@RequestParam(required = false) List<Shift> schedule) {
+			@RequestParam(required = false) String email, @RequestParam(required = false) String empId) {
 		Employee employee = service.getEmployee(id);
 		employee.setFirstname(firstname);
 		employee.setLastname(lastname);
 		employee.setEmail(email);
 		employee.setEmpId(empId);
-		employee.setSchedule(schedule);
 		service.updateEmployee(id, employee);
 		return "redirect:/";
 	}
@@ -150,7 +159,7 @@ public class EmployeeHomeController {
 		model.addAttribute("employee", service.getEmployee(id));
 		model.addAttribute("firstname", service.getEmployee(id).getFirstname());
 		if (service.getEmployee(id).getSchedule() != null) {
-			//model.addAttribute("totalHours", service.getEmployee(id).getSchedule().get(0).getTotalHours());
+			
 			model.addAttribute("totalHours", service.getEmployee(id).getTotalHours());
 		}
 		return "schedule";
@@ -345,5 +354,14 @@ public class EmployeeHomeController {
 		
 		
 		return "confirm-delete-shift";
+	}
+	
+	@RequestMapping("/employee-details")
+	public String showEmployeeDetails(Model model, @RequestParam(required = false) String id) {
+		
+		Employee employee = service.getEmployee(id);
+		model.addAttribute("employee", employee);
+		
+		return "employee-details";
 	}
 }

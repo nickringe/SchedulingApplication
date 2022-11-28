@@ -40,9 +40,9 @@
 
 			</tr>
 
-			<c:forEach var="emp" items="${employees}">
+			<c:forEach var="emp" items="${sortedList}">
 				<tr>
-					<td class="text-center">${emp.firstname} ${emp.lastname}</td>
+					<td class="text-center"><a href="/employee-details?id=${emp.id}">${emp.firstname} ${emp.lastname}</a></td>
 					<td class="text-center">${emp.email}</td>
 					<td class="text-center">${emp.empId}</td>
 					<td class="text-center"><a href="/schedule?id=${emp.id}"><i class="fa-solid fa-eye"></i></a></td>

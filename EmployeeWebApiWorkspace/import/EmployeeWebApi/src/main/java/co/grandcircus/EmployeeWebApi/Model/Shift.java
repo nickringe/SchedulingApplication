@@ -16,14 +16,14 @@ public class Shift {
 	public Shift() {
 	}
 	
-	public Shift(String id, String shiftName, String date, String startTime, String endTime, Double shiftLength) {
-		this.id = id;
-		this.shiftName = shiftName;
-		this.date = date;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.shiftLength = shiftLength;
-	}
+//	public Shift(String id, String shiftName, String date, String startTime, String endTime, Double shiftLength) {
+//		this.id = id;
+//		this.shiftName = shiftName;
+//		this.date = date;
+//		this.startTime = startTime;
+//		this.endTime = endTime;
+//		this.shiftLength = shiftLength;
+//	}
 	
 	public Shift(String shiftName, String date, String startTime, String endTime) {
 		this.shiftName = shiftName;
