@@ -17,7 +17,7 @@
 	<br>
 		<div class="text-center">
 			<a href="/" class="btn btn-info">Home</a>
-			<a href="" class="btn btn-info">View Open Shifts</a>	
+			<a href="/master" class="btn btn-info">View Open Shifts</a>	
 			<a href="/create-shift" class="btn btn-info">Create New Shifts</a> <br><br>
 			<div class="text-center"><h3>${shiftRemoved}</h3></div>
 			<h2>Schedule for ${employee.firstname} ${employee.lastname}</h2>
@@ -56,16 +56,6 @@
 							<input type="submit" value="Delete" class="btn btn-danger">
 							</form>
 						</td>
-						<%-- <td><a href="/remove?shiftId=${shift.id}&id=${employee.id}">Delete Shift</a></td> --%>
-					<!-- <td><button onclick="myFunction()" type="button" class="btn btn-danger">Delete Shift</button>
-						<script>
-							function myFunction() {
-  								if (confirm("Are you sure you want to delete this shift?")) {
-	 								location.href = "/remove?shiftId=${shift.id}&id=${employee.id}";
-  									} 
-								}
-						</script>
-						</td> -->
 					</tr>
 				</c:forEach>
 			</table>

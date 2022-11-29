@@ -1,5 +1,6 @@
 package co.grandcircus.EmployeeWebApi.Model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -16,21 +17,12 @@ public class Shift {
 	public Shift() {
 	}
 	
-//	public Shift(String id, String shiftName, String date, String startTime, String endTime, Double shiftLength) {
-//		this.id = id;
-//		this.shiftName = shiftName;
-//		this.date = date;
-//		this.startTime = startTime;
-//		this.endTime = endTime;
-//		this.shiftLength = shiftLength;
-//	}
-	
 	public Shift(String shiftName, String date, String startTime, String endTime) {
 		this.shiftName = shiftName;
 		this.date = date;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.shiftLength = (double) ChronoUnit.HOURS.between(LocalDateTime.parse(startTime), LocalDateTime.parse(endTime));
+		this.shiftLength = (double) ChronoUnit.HOURS.between(LocalDateTime.parse(date+"T"+startTime), LocalDateTime.parse(date+"T"+	endTime));
 	}
 
 	public String getShiftName() {
@@ -50,10 +42,11 @@ public class Shift {
 	}
 	
 	public String getDateString() {
-		LocalDateTime dateString = LocalDateTime.parse(date);
+		LocalDate dateString = LocalDate.parse(date);
 		String dayString1 = dateString.getDayOfWeek().toString().substring(0,1);
 		String dayString2 = dateString.getDayOfWeek().toString().substring(1,3).toLowerCase();
 		return dayString1 + dayString2 + " " + dateString.format(DateTimeFormatter.ofPattern("MM-dd-yyyy"));
+		
 	}
 
 	public String getStartTime() {
@@ -87,14 +80,22 @@ public class Shift {
 		return id;
 	}
 	
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 	public String getStartTimeString() {
-		LocalDateTime startString = LocalDateTime.parse(startTime);
+		String formattedDateTime = date + "T" + startTime;
+		LocalDateTime startString = LocalDateTime.parse(formattedDateTime);
 		return startString.format(DateTimeFormatter.ofPattern("hh:MM a"));
+		
 	}
 	
 	public String getEndTimeString() {
-		LocalDateTime endString = LocalDateTime.parse(endTime);
+		String formattedDateTime = date + "T" + endTime;
+		LocalDateTime endString = LocalDateTime.parse(formattedDateTime);
 		return endString.format(DateTimeFormatter.ofPattern("hh:MM a"));
+		
 	}
 	
 	

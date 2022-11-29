@@ -32,15 +32,16 @@
 		<div class="child"><h4>${shiftAdded }</h4></div>
 		<div class="boxCenterThin">
 			<br>
+			<!-- <form class="form" action="/test" method="get"> -->
 			<form class="form" action="/add-created-shift" method="post">
 				<div class="bold">Shift Name:  </div><input type="text" name="shiftName" id="shiftName" placeholder="ex. Carpenter" required><br> <br>
-				<div class="bold">Date: </div><input type="datetime-local" name="date" id="date" required> <br><br>
-				<div class="bold">Start Time: </div><input type="datetime-local" name="startTime" id="startTime" required > <br><br>
-				<div class="bold">End Time: </div><input type="datetime-local" name="endTime" id="endTime"  required > <br><br>
+				<div class="bold">Date: </div><input type="date" name="date" id="date" required> <br><br>
+				<div class="bold">Start Time: </div><input type="time" name="startTime" id="startTime" required > <br><br>
+				<div class="bold">End Time: </div><input type="time" name="endTime" id="endTime"  required > <br><br>
 				<div class="bold">Assign to Employee (optional) </div>
 				<ul>
 
-					<c:forEach var="employee" items="${employees }">
+					<c:forEach var="employee" items="${sortedList }">
 					<li>${employee.firstname} ${employee.lastname } <input type="checkbox" name="id" id="id" value="${employee.id }"> </li> 
 					</c:forEach>
 </ul>

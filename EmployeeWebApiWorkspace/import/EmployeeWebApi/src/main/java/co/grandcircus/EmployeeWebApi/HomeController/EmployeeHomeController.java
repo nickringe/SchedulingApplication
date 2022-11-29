@@ -45,7 +45,13 @@ public class EmployeeHomeController {
 	@RequestMapping("/create-shift")
 	public String showCreateShift(Model model) {
 		
+		ArrayList<Employee> sortedList = new ArrayList<>();
+		for (Employee employee : service.getAllEmployees()) {
+			sortedList.add(employee);
+		}
+		Collections.sort(sortedList, Comparator.comparing(Employee::getLastname));
 		model.addAttribute("employees", service.getAllEmployees());
+		model.addAttribute("sortedList", sortedList);
 		return "create-shift";
 	}
 	
@@ -55,21 +61,27 @@ public class EmployeeHomeController {
 			@RequestParam(required = false) String shiftName, @RequestParam(required = false) String date,
 			@RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime) {
 		
-		String shiftAdded = "Shift added";
+		String shiftAdded = shiftName + " Shift added on " + date;
 		
 		System.out.println("1. Got to initial method");
 		//if id is null, add to master schedule
 		if (id == null) {
+			//find Master schedule and create shift to be added
 			Employee master = service.getEmployee("634c155f245151700ec73b89");
 			List<Shift> masterSchedule = master.getSchedule();
-			//
 			Shift newShift = new Shift(shiftName, date, startTime, endTime);
-			//masterSchedule.add(newShift);
-			//master.setSchedule(masterSchedule);
 			
-			System.out.println("1.");
-			//service.updateEmployee("634c155f245151700ec73b89", master);
-			service.updateEmployeeSchedule(newShift, "634c155f245151700ec73b89");
+			//generate a random Employee ID and set it
+			Integer random_int = (int)Math.floor(Math.random()*(99999999-10000000+1)+10000000);
+			newShift.setId(random_int.toString());
+			
+			//add the completed shift to the Master Schedule, set Master schedule
+			masterSchedule.add(newShift);
+			master.setSchedule(masterSchedule);
+			
+			System.out.println("1a. Got to master schedule portion");
+			//saves updated shift to the database
+			service.updateEmployee("634c155f245151700ec73b89", master);
 			
 			model.addAttribute("employees", service.getAllEmployees());
 			model.addAttribute("shiftAdded", shiftAdded);
@@ -77,16 +89,18 @@ public class EmployeeHomeController {
 			
 			return "create-shift";
 		}
-		System.out.println("2. Got to employee portion");
+		System.out.println("1a. Got to employee portion");
 		//else add to employee's schedule
 		Employee employee = service.getEmployee(id);
-		//List<Shift> employeeSchedule = employee.getSchedule();
+		List<Shift> employeeSchedule = employee.getSchedule();
 		Shift newEmployeeShift = new Shift(shiftName, date, startTime, endTime);
-//		employeeSchedule.add(newEmployeeShift);
-//		employee.setSchedule(employeeSchedule);
+		Integer random_int = (int)Math.floor(Math.random()*(99999999-10000000+1)+10000000);
+		newEmployeeShift.setId(random_int.toString());
+		employeeSchedule.add(newEmployeeShift);
+		employee.setSchedule(employeeSchedule);
 		
-		//service.updateEmployee(id, employee);
-		service.updateEmployeeSchedule(newEmployeeShift, employee.getId());
+		service.updateEmployee(id, employee);
+		
 		System.out.println("3. Got past the service method");
 		
 		model.addAttribute("employees", service.getAllEmployees());
@@ -431,5 +445,16 @@ public class EmployeeHomeController {
 		model.addAttribute("employee", employee);
 		
 		return "employee-details";
+	}
+	
+	@RequestMapping("/test")
+	public String testDates(@RequestParam(required = false) String id,
+			@RequestParam(required = false) String shiftName, @RequestParam(required = false) String date,
+			@RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime) {
+		
+		System.out.println("date: " + date);
+		System.out.println("startTime: " + startTime);
+		System.out.println("endTime: " + endTime);
+		return "index";
 	}
 }
