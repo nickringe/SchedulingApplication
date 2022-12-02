@@ -69,11 +69,12 @@
 						
 							${date.dayOfMonth}
 							<br>
+							
 								<c:set var="dateString">${date.toString()}</c:set>
 								<c:forEach var="shift" items="${shifts[dateString]}">
-																
-									<div class="child"> ${shift.startTimeString} - ${shift.endTimeString}<br></div>
-									<div class="child"><div class="bold"> ${shift.shiftName} </div></div>
+										<a href="/shift-details?id=${employee.id}&shiftId=${shift.id}">		
+										<div class="child"> ${shift.startTimeString} - ${shift.endTimeString}<br></div>
+										<div class="child"><div class="bold"> ${shift.shiftName} </div></div></a>
 								</c:forEach>
 							
 						</td>

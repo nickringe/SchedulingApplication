@@ -590,6 +590,23 @@ public class EmployeeHomeController {
 		return "weekly-calendar";
 	}
 	
+	@RequestMapping("/shift-details")
+	public String displayShiftDetails(Model model, @RequestParam String id,
+			@RequestParam String shiftId) {
+		
+		Employee employee = service.getEmployee(id);
+		for (Shift shift : employee.getSchedule()) {
+			if (shift.getId().equals(shiftId)) {
+				model.addAttribute("shift", shift);
+			}
+		}
+		
+		model.addAttribute("employee", employee);
+		
+		return "shift-details";
+		
+	}
+	
 	//helper methods to calculate dates
 	
 	private static int calculateDayOfWeek(int day, int month, int year) {

@@ -33,7 +33,6 @@
 		<div class="child"><h4>${shiftAdded }</h4></div>
 		<div class="boxCenterThin">
 			<br>
-			<!-- <form class="form" action="/test" method="get"> -->
 			<form class="form" action="/add-created-shift" method="post">
 				<div class="bold">Shift Name:  </div><input type="text" name="shiftName" id="shiftName" placeholder="ex. Carpenter" required><br> <br>
 				<div class="bold">Date: </div><input type="date" name="date" id="date" required> <br><br>
