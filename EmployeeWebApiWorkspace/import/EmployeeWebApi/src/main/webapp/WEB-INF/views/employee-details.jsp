@@ -21,6 +21,7 @@
 			<a href="/" class="btn btn-info">Home</a>
 			<a href="/master" class="btn btn-info">View Open Shifts</a>	
 			<a href="/create-shift" class="btn btn-info">Create New Shifts</a>	
+			<a href="/add-employee" class="btn btn-info">Add Employee</a>
 		</div>
 		
 		<h2 class="text-center">Employee Details for ${employee.firstname} ${employee.lastname}</h2> 

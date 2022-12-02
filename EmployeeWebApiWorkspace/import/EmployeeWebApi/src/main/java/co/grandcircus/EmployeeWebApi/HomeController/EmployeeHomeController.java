@@ -113,8 +113,8 @@ public class EmployeeHomeController {
 
 		String empIdAlreadyExists = "Employee ID already exists";
 		model.addAttribute("empIdAlreadyExists", empIdAlreadyExists);
-		model.addAttribute("employees", service.getAllEmployees());
-		return "index";
+		
+		return "add-employee";
 	}
 
 	@RequestMapping("/delete")
@@ -137,10 +137,10 @@ public class EmployeeHomeController {
 		for (Employee emp : service.getAllEmployees()) {
 
 			if (emp.getEmpId().equals(empId)) {
-				String empIdAlreadyExists = "- Employee ID already exists -";
+				String empIdAlreadyExists = "- Employee ID " + empId + " already exists -";
 				model.addAttribute("empIdAlreadyExists", empIdAlreadyExists);
 
-				return "redirect:/1";
+				return "add-employee";
 			}
 		}
 	
@@ -179,8 +179,10 @@ public class EmployeeHomeController {
 			employee.setEmergencyPhone(emergencyPhone);
 		}
 		service.addEmployee(employee);
+		String success = firstname + " " + lastname + " successfully added";
+		model.addAttribute("success", success);
 		
-		return "redirect:/";
+		return "add-employee";
 	}
 
 	@RequestMapping("/form")
@@ -452,9 +454,12 @@ public class EmployeeHomeController {
 			@RequestParam(required = false) String shiftName, @RequestParam(required = false) String date,
 			@RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime) {
 		
-		System.out.println("date: " + date);
-		System.out.println("startTime: " + startTime);
-		System.out.println("endTime: " + endTime);
-		return "index";
+		System.out.println("Success");
+		return "add-employee";
+	}
+	
+	@RequestMapping("/add-employee")
+	public String showAddEmployee(Model model) {
+		return "add-employee";
 	}
 }

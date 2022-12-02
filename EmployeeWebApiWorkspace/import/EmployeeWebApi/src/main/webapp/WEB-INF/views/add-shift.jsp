@@ -19,7 +19,8 @@
 		<div class="text-center">
 			<a href="/" class="btn btn-info">Home</a>
 			<a href="" class="btn btn-info">View Open Shifts</a>	
-			<a href="/create-shift" class="btn btn-info">Create New Shifts</a> <br><br>
+			<a href="/create-shift" class="btn btn-info">Create New Shifts</a>
+			<a href="/add-employee" class="btn btn-info">Add Employee</a> <br><br>
 			<div class="child"><a href="/schedule?id=${employee.id}" class="btn btn-primary">Back to ${employee.firstname}'s Schedule</a></div>
 			<h2>Pick up a new shift for ${employee.firstname} ${employee.lastname}</h2>
 		</div>

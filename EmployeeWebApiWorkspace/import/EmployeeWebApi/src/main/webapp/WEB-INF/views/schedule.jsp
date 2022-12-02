@@ -18,7 +18,8 @@
 		<div class="text-center">
 			<a href="/" class="btn btn-info">Home</a>
 			<a href="/master" class="btn btn-info">View Open Shifts</a>	
-			<a href="/create-shift" class="btn btn-info">Create New Shifts</a> <br><br>
+			<a href="/create-shift" class="btn btn-info">Create New Shifts</a>
+			<a href="/add-employee" class="btn btn-info">Add Employee</a> <br><br>
 			<div class="text-center"><h3>${shiftRemoved}</h3></div>
 			<h2>Schedule for ${employee.firstname} ${employee.lastname}</h2>
 		</div>

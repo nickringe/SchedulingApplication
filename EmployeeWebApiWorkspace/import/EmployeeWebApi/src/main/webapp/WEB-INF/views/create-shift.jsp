@@ -21,6 +21,7 @@
 		<a href="/" class="btn btn-info">Home</a>
 		<a href="/master" class="btn btn-info">View Open Shifts</a>	
 		<a href="" class="btn btn-primary active">Create New Shifts</a>
+		<a href="/add-employee" class="btn btn-info">Add Employee</a>
 	</div>
 	
 	<div class="child">
@@ -39,12 +40,15 @@
 				<div class="bold">Start Time: </div><input type="time" name="startTime" id="startTime" required > <br><br>
 				<div class="bold">End Time: </div><input type="time" name="endTime" id="endTime"  required > <br><br>
 				<div class="bold">Assign to Employee (optional) </div>
-				<ul>
-
-					<c:forEach var="employee" items="${sortedList }">
-					<li>${employee.firstname} ${employee.lastname } <input type="checkbox" name="id" id="id" value="${employee.id }"> </li> 
-					</c:forEach>
-</ul>
+		
+				<select name="id">
+					<option value="">Select an employee</option>
+						<c:forEach var="employee" items="${sortedList}">
+							<option value="${employee.id }" id="id">${employee.firstname} ${employee.lastname }</option>
+						</c:forEach>
+				</select>
+				
+				<br><br>
 
 				<div class="child"><input type="submit" class="btn-success" value="Add Shift"></div>
 			</form>
