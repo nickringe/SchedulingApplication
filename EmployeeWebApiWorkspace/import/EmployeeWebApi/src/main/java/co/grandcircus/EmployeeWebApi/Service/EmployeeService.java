@@ -72,6 +72,17 @@ public class EmployeeService {
 		HashMap<String, ArrayList<Shift>> response = request.exchange(request1, responseType).getBody();
 		return response;
 	}
+	
+	public HashMap<String, ArrayList<Shift>> getShiftsByTimeRangeAndId(String start, String end, String id){
+		String url = baseUrl + "/shift/" + start + "/" + end + "/" + id;
+		
+		ParameterizedTypeReference<HashMap<String, ArrayList<Shift>>> responseType = 
+				new ParameterizedTypeReference<HashMap<String, ArrayList<Shift>>>(){};
+		
+		RequestEntity<Void> request1 = RequestEntity.get(url).accept(MediaType.APPLICATION_JSON).build();
+		HashMap<String, ArrayList<Shift>> response = request.exchange(request1, responseType).getBody();
+		return response;
+	}
 
 	
 	

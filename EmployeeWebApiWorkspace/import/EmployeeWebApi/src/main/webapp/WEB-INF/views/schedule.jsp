@@ -8,7 +8,7 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 		<link rel="stylesheet" href="styles.css">
 		<meta charset="ISO-8859-1">
-		<title>Employee Schedule</title>
+		<title>Employee Schedule - List</title>
 	</head>
 	<body>
 		<header class="header">
@@ -24,7 +24,9 @@
 			<h2>Schedule for ${employee.firstname} ${employee.lastname}</h2>
 		</div>
 		<div class="child">
-			<a href="/add-shift?id=${employee.id }" class="btn btn-primary">Add Shift</a>
+			<a href="#0" class="btn btn-primary">List View</a> &nbsp;
+			<a href="/schedule-weekly?id=${employee.id}" class="btn btn-info">Weekly View</a> &nbsp;
+			<a href="/add-shift?id=${employee.id }" class="btn btn-success">Add Shift</a>
 		</div> <br>
 
 		<c:if test="${not empty employee.schedule}">

@@ -138,6 +138,44 @@ public class EmployeeController {
 		return datesToEvents;
 	}
 	
+	@GetMapping("/shift/{start}/{end}/{id}")
+	public HashMap<String, ArrayList<Shift>> getShiftsBetweenWithId(@PathVariable("start") String start, @PathVariable("end") String end,
+			@PathVariable("id") String id){
+		List<Shift> shifts = new ArrayList<>();
+		Employee employee = repo.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
+		for (Shift employeeShift : employee.getSchedule()) {
+			shifts.add(employeeShift);
+		}
+		
+		HashMap<String, ArrayList<Shift>> datesToEvents = new HashMap<String, ArrayList<Shift>>();
+		LocalDate startDate;
+		LocalDate endDate;
+		
+		for(Shift shift : shifts) {
+			//Start and end of current object
+			startDate = LocalDateTime.parse(shift.getDate() + "T" +shift.getStartTime()).toLocalDate();
+			endDate = LocalDateTime.parse(shift.getDate() + "T" + 
+			shift.getEndTime()).toLocalDate();
+			
+			//Put the current even in the list contained under the startdate key
+			if(!datesToEvents.containsKey(startDate.toString())) {
+				datesToEvents.put(startDate.toString(), new ArrayList<Shift>());
+			}
+			datesToEvents.get(startDate.toString()).add(shift);
+			startDate = startDate.plusDays(1);
+			
+			while(startDate.isBefore(endDate) || startDate.isEqual(endDate)) {
+				if(!datesToEvents.containsKey(startDate.toString())) {
+					datesToEvents.put(startDate.toString(), new ArrayList<Shift>());
+				}
+				datesToEvents.get(startDate.toString()).add(shift);
+				startDate = startDate.plusDays(1);
+			}
+		}
+		
+		return datesToEvents;
+	}
+	
 	
 	@ResponseBody
 	@ExceptionHandler(EmployeeNotFoundException.class)

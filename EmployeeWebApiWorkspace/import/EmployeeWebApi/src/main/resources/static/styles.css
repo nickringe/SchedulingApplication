@@ -55,6 +55,11 @@
 	font-weight: bold;
 }
 
+.calendar{
+	font-family: Colfax;
+	font-size: 18px;
+}
+
 .header {
 	display: flex;
 	height: 100px;

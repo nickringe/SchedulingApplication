@@ -119,12 +119,14 @@ public class EmployeeHomeController {
 		return "add-employee";
 	}
 
+	//deletes an employee based on their object ID
 	@RequestMapping("/delete")
 	public String deleteEmployee(@RequestParam String id) {
 		service.deleteEmployee(id);
 		return "redirect:/";
 	}
 
+	//add a new employee
 	@PostMapping("/add")
 	public String addEmployee(Model model, @RequestParam(required = false) String id,
 			@RequestParam(required = false) String firstname, @RequestParam(required = false) String lastname,
@@ -240,6 +242,7 @@ public class EmployeeHomeController {
 		return "redirect:/";
 	}
 
+	//returns a list of ALL shifts for one employee
 	@RequestMapping("/schedule")
 	public String viewEmployeeSchedule(Model model, @RequestParam(required = false) String id) {
 		model.addAttribute("employee", service.getEmployee(id));
@@ -250,6 +253,66 @@ public class EmployeeHomeController {
 		}
 		return "schedule";
 	}
+	
+	//weekly view for schedule
+	@RequestMapping("/schedule-weekly")
+	public String viewWeeklyEmployeeSchedule(Model model, @RequestParam(required = false) String id,
+			@RequestParam(required = false) String date) {
+		model.addAttribute("employee", service.getEmployee(id));
+		model.addAttribute("firstname", service.getEmployee(id).getFirstname());
+		if (service.getEmployee(id).getSchedule() != null) {
+			model.addAttribute("totalHours", service.getEmployee(id).getTotalHours());
+		}
+		// If page is entered with no params (clicking on weekly view instead of either
+				// of the arrows)
+				LocalDate today;
+				if (date == null) {
+					today = LocalDate.now();
+				} else {
+					today = LocalDate.parse(date);
+				}
+				date = today.toString();
+				String displayToday = LocalDate.now().toString();
+				model.addAttribute("displayToday", displayToday);
+				
+				// Stores the numbers to be printed for the current week
+				List<LocalDate> dates = new ArrayList<LocalDate>(7);
+				HashMap<String, ArrayList<Shift>> shifts;
+
+				// determines the day num of the current day, so that we can determine how many
+				// days to backpedal in order to point at sunday
+				int dayOffset = calculateDayOfWeek(today.getDayOfMonth(), today.getMonthValue(), today.getYear());
+				today = today.minusDays(dayOffset);
+
+				// Used for printing the correct day numbers of this week on the jsp
+				for (int i = 0; i < 7; i++) {
+					dates.add(today);
+					today = today.plusDays(1);
+				}
+				
+				shifts = service.getShiftsByTimeRangeAndId(dates.get(0).toString(), dates.get(dates.size() -1).toString(), id);
+			
+
+				// Set today to the first day of this week
+				today = today.minusDays(7);
+				model.addAttribute("curWeekDate", today);
+				model.addAttribute("curWeekMonthString", monthNumToString(today.getMonthValue()));
+				// Set today to next weeks date
+				today = today.plusDays(7);
+				model.addAttribute("nextWeekDate", today.toString());
+				// Set today to last weeks date
+				today = today.minusDays(14);
+				model.addAttribute("prevWeekDate", today.toString());
+				// Day numbers to be printed
+				model.addAttribute("dates", dates);
+				model.addAttribute("shifts", shifts);
+				shifts.forEach((key, value) -> System.out.println(key.toString() + ":" + value.toString()));
+				// Set today to curDay for daily info section
+				today = LocalDate.parse(date);
+				model.addAttribute("curDayDate", today);
+				model.addAttribute("curDayMonthString", monthNumToString(today.getMonthValue()));
+		return "schedule-weekly";
+	}
 
 	//deletes a given shift
 	@RequestMapping("/remove")
@@ -258,6 +321,7 @@ public class EmployeeHomeController {
 		return "redirect:/schedule?id=" + id;
 	}
 
+	//adds a shift to either the Master Schedule or an employee's schedule
 	@GetMapping("/add-shift")
 	public String displayAddShift(Model model, @RequestParam(required = false) String id) {
 		Employee employee = service.getEmployee(id);
@@ -279,6 +343,7 @@ public class EmployeeHomeController {
 		return "add-shift";
 	}
 
+	//returns shifts that are within a given time range
 	@GetMapping("/search")
 	public String searchForOpenShifts(Model model, @RequestParam(required = false) String id, String searchStart,
 			String searchEnd) {
@@ -408,6 +473,7 @@ public class EmployeeHomeController {
 		return "add-shift";
 	}
 	
+	//confirms you want to delete the employee
 	@RequestMapping("/confirm-delete")
 	public String confirmDelete(Model model, @RequestParam(required=false) String id) {
 		
@@ -420,6 +486,7 @@ public class EmployeeHomeController {
 		return "confirm-delete";
 	}
 	
+	//confirms you want to delete a single shift
 	@RequestMapping("/confirm-delete-shift")
 	public String confirmDeleteShift(Model model, @RequestParam(required=false) String id, 
 			@RequestParam(required=false) String shiftId, @RequestParam(required=false) String shiftName,
@@ -442,6 +509,7 @@ public class EmployeeHomeController {
 		return "confirm-delete-shift";
 	}
 	
+	//shows employee details jsp
 	@RequestMapping("/employee-details")
 	public String showEmployeeDetails(Model model, @RequestParam(required = false) String id) {
 		
@@ -460,11 +528,13 @@ public class EmployeeHomeController {
 		return "add-employee";
 	}
 	
+	//add employee jsp
 	@RequestMapping("/add-employee")
 	public String showAddEmployee(Model model) {
 		return "add-employee";
 	}
 	
+	//shows ALL shifts on a weekly calendar view
 	@RequestMapping("/weekly-calendar")
 	public String displayWeek(Model model, @RequestParam(required = false) String date) {
 
@@ -516,13 +586,6 @@ public class EmployeeHomeController {
 		today = LocalDate.parse(date);
 		model.addAttribute("curDayDate", today);
 		model.addAttribute("curDayMonthString", monthNumToString(today.getMonthValue()));
-	
-
-//		for (int i = 0; i < dates.size(); i++) {
-//			if (dates.get(i).toString().equals(date)) {
-//				model.addAttribute("dayEvents", events.get(dates.get(i).toString()));
-//			}
-//		}
 
 		return "weekly-calendar";
 	}
