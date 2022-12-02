@@ -27,7 +27,7 @@
 
 	<br>
 	<h2 class="text-center">Employees</h2>
-	<div class="child"><h3> ${empIdAlreadyExists}</h3></div>
+
 	<div class="box">
 
 		<table class="table">
@@ -68,23 +68,7 @@
 			</c:forEach>
 		</table>
 	</div>
-	<h3 class="text-center">Add New Employee</h3>
 	
-	<div class="boxCenter">
-	
-		<form class="form" action="/add" method="post">
-			<div class="boxCenter">
-			<div class="bold">First Name: </div> <input type="text" placeholder="First Name"  name="firstname" required/> &nbsp;&nbsp;
-			<div class="bold">Last Name: </div> <input type="text" placeholder="Last Name"  name="lastname" required/> &nbsp;&nbsp;
-			<div class="bold">Email: </div><input type="text" placeholder="Email"  name="email" required/> &nbsp;&nbsp;
-			<div class="bold">Employee ID: </div><input type="number" placeholder="Employee ID"  name="empId" required/>&nbsp;&nbsp;
-			<input type="hidden" name="schedule" value=""/> <br><br>
-			<div class="child"><input type="submit" class="btn-success" />	</div>
-			</div>
-		</form>
-	</div>
-	
-	<br>
 	
 	
 </body>
