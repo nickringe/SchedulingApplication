@@ -1,10 +1,12 @@
 package co.grandcircus.EmployeeWebApi.HomeController;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -462,4 +464,175 @@ public class EmployeeHomeController {
 	public String showAddEmployee(Model model) {
 		return "add-employee";
 	}
+	
+	@RequestMapping("/weekly-calendar")
+	public String displayWeek(Model model, @RequestParam(required = false) String date) {
+
+		// If page is entered with no params (clicking on weekly view instead of either
+		// of the arrows)
+		LocalDate today;
+		if (date == null) {
+			today = LocalDate.now();
+		} else {
+			today = LocalDate.parse(date);
+		}
+		date = today.toString();
+		String displayToday = LocalDate.now().toString();
+		model.addAttribute("displayToday", displayToday);
+		
+		// Stores the numbers to be printed for the current week
+		List<LocalDate> dates = new ArrayList<LocalDate>(7);
+		HashMap<String, ArrayList<Shift>> shifts;
+
+		// determines the day num of the current day, so that we can determine how many
+		// days to backpedal in order to point at sunday
+		int dayOffset = calculateDayOfWeek(today.getDayOfMonth(), today.getMonthValue(), today.getYear());
+		today = today.minusDays(dayOffset);
+
+		// Used for printing the correct day numbers of this week on the jsp
+		for (int i = 0; i < 7; i++) {
+			dates.add(today);
+			today = today.plusDays(1);
+		}
+		
+		shifts = service.getShiftsByTimeRange(dates.get(0).toString(), dates.get(dates.size() -1).toString());
+	
+
+		// Set today to the first day of this week
+		today = today.minusDays(7);
+		model.addAttribute("curWeekDate", today);
+		model.addAttribute("curWeekMonthString", monthNumToString(today.getMonthValue()));
+		// Set today to next weeks date
+		today = today.plusDays(7);
+		model.addAttribute("nextWeekDate", today.toString());
+		// Set today to last weeks date
+		today = today.minusDays(14);
+		model.addAttribute("prevWeekDate", today.toString());
+		// Day numbers to be printed
+		model.addAttribute("dates", dates);
+		model.addAttribute("shifts", shifts);
+		shifts.forEach((key, value) -> System.out.println(key.toString() + ":" + value.toString()));
+		// Set today to curDay for daily info section
+		today = LocalDate.parse(date);
+		model.addAttribute("curDayDate", today);
+		model.addAttribute("curDayMonthString", monthNumToString(today.getMonthValue()));
+	
+
+//		for (int i = 0; i < dates.size(); i++) {
+//			if (dates.get(i).toString().equals(date)) {
+//				model.addAttribute("dayEvents", events.get(dates.get(i).toString()));
+//			}
+//		}
+
+		return "weekly-calendar";
+	}
+	
+	//helper methods to calculate dates
+	
+	private static int calculateDayOfWeek(int day, int month, int year) {
+		// Source:
+		// https://artofmemory.com/blog/how-to-calculate-the-day-of-the-week/
+
+		int[] monthCodes = { 0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5 };
+		int yearCode, monthCode, centuryCode = 6, dateNum, leapYearCode;
+		yearCode = ((year % 100) + ((year % 100) / 4)) % 7;
+		monthCode = monthCodes[month - 1];
+		switch (year / 100) {
+		case 17:
+			centuryCode = 4;
+			break;
+		case 18:
+			centuryCode = 2;
+			break;
+		case 19:
+			centuryCode = 0;
+			break;
+		case 20:
+			centuryCode = 6;
+			break;
+		case 21:
+			centuryCode = 4;
+			break;
+		case 22:
+			centuryCode = 2;
+			break;
+		case 23:
+			centuryCode = 0;
+			break;
+		}
+		dateNum = day;
+		if (((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) && (month == 0 || month == 1))
+			leapYearCode = -1;
+		else
+			leapYearCode = 0;
+
+		return (yearCode + monthCode + centuryCode + dateNum + leapYearCode) % 7;
+	}
+
+	/**
+	 * Return the number of days in the given month
+	 * 
+	 * @param monthNum the number of the month [1-12]
+	 * @param year     the year in gregorian calendar (eg. 2022)
+	 * @return the number of days in the given month
+	 */
+	private static int numDaysInMonth(int monthNum, int year) {
+		int leapYearCode = 0;
+		int[] numDays = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+		// Checks if its a leap year
+		if (((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) && (monthNum == 2))
+			leapYearCode = 1;
+
+		return numDays[monthNum - 1] + leapYearCode;
+	}
+
+	private static String monthNumToString(int monthNum) {
+		switch (monthNum) {
+		case 1:
+			return "January";
+		case 2:
+			return "February";
+		case 3:
+			return "March";
+		case 4:
+			return "April";
+		case 5:
+			return "May";
+		case 6:
+			return "June";
+		case 7:
+			return "July";
+		case 8:
+			return "August";
+		case 9:
+			return "September";
+		case 10:
+			return "October";
+		case 11:
+			return "November";
+		case 12:
+			return "December";
+		default:
+			return "Invalid month";
+		}
+	}
+	// helper method to make sure month is always 2 digits (required by API call)
+		public String monthToString(Integer month) {
+			if (month.toString().length() == 1) {
+				String newMonth = "0" + month;
+				return newMonth;
+			}
+			return month.toString();
+		}
+
+		// helper method to make sure day is always 2 digits (required by API call)
+		public String dayToString(Integer day) {
+			if (day.toString().length() == 1) {
+				String newDay = "0" + day;
+				return newDay;
+			}
+			return day.toString();
+		}
+
 }

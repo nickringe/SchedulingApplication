@@ -66,6 +66,26 @@
 	border-style: outset;
 	border-color: black;
 	border-width: 3px;
-	
-	
+}
+.calendar-and-daily-info{
+	font-family: 'Poppins';
+	display:flex;
+	justify-content:space-around;
+	margin: 5% 2% 5% 2%;
+}
+
+/* */
+.calendar-and-daily-info td a:hover {
+	/*background-color: #f26d66; */
+	transition: background-color 0.5s;
+	font-weight: 900;
+	box-shadow: 0px 0px 2px 2px black;
+}
+
+.month-navigation{
+	display:flex;
+	flex-direction:row;
+	justify-content:center;
+	margin-bottom: 2%;
+	margin-top: 2%;
 }

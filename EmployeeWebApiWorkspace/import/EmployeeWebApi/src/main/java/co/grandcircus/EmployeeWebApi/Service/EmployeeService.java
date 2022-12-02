@@ -1,6 +1,12 @@
 package co.grandcircus.EmployeeWebApi.Service;
 
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,6 +60,17 @@ public class EmployeeService {
 		url = baseUrl + "/delete/" + shiftId + "/" + id;
 		request.delete(url, shiftId, id);
 		
+	}
+	
+	public HashMap<String, ArrayList<Shift>> getShiftsByTimeRange(String start, String end){
+		String url = baseUrl + "/shift/" + start + "/" + end;
+		
+		ParameterizedTypeReference<HashMap<String, ArrayList<Shift>>> responseType = 
+				new ParameterizedTypeReference<HashMap<String, ArrayList<Shift>>>(){};
+		
+		RequestEntity<Void> request1 = RequestEntity.get(url).accept(MediaType.APPLICATION_JSON).build();
+		HashMap<String, ArrayList<Shift>> response = request.exchange(request1, responseType).getBody();
+		return response;
 	}
 
 	

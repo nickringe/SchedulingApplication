@@ -20,7 +20,7 @@
 	<br>
 	<div class="text-center">
 		<a href="" class="btn btn-primary active">Home</a>
-		<a href="/master" class="btn btn-info">View Open Shifts</a>	
+		<a href="/weekly-calendar" class="btn btn-info">View Schedule</a>	
 		<a href="/create-shift" class="btn btn-info">Create New Shifts</a>
 		<a href="/add-employee" class="btn btn-info">Add Employee</a>
 	</div>

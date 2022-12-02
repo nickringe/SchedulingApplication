@@ -1,6 +1,9 @@
 package co.grandcircus.EmployeeApi.Controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -96,6 +99,43 @@ public class EmployeeController {
 		System.out.println("1. Made it to 8080 API... id: " + id);
 		repo.updateById(id, employeeShift.getShiftName(), employeeShift.getDate(), employeeShift.getStartTime(), employeeShift.getEndTime());
 		System.out.println("2. Made it through repo.updateById to end of 8080 API");
+	}
+	
+	@GetMapping("/shift/{start}/{end}")
+	public HashMap<String, ArrayList<Shift>> getShiftsBetween(@PathVariable("start") String start, @PathVariable("end") String end){
+		List<Shift> shifts = new ArrayList<>();
+		for (Employee employee : repo.findAll()) {
+			for (Shift employeeShift : employee.getSchedule()) {
+				shifts.add(employeeShift);
+			}
+		}
+		HashMap<String, ArrayList<Shift>> datesToEvents = new HashMap<String, ArrayList<Shift>>();
+		LocalDate startDate;
+		LocalDate endDate;
+		
+		for(Shift shift : shifts) {
+			//Start and end of current object
+			startDate = LocalDateTime.parse(shift.getDate() + "T" +shift.getStartTime()).toLocalDate();
+			endDate = LocalDateTime.parse(shift.getDate() + "T" + 
+			shift.getEndTime()).toLocalDate();
+			
+			//Put the current even in the list contained under the startdate key
+			if(!datesToEvents.containsKey(startDate.toString())) {
+				datesToEvents.put(startDate.toString(), new ArrayList<Shift>());
+			}
+			datesToEvents.get(startDate.toString()).add(shift);
+			startDate = startDate.plusDays(1);
+			
+			while(startDate.isBefore(endDate) || startDate.isEqual(endDate)) {
+				if(!datesToEvents.containsKey(startDate.toString())) {
+					datesToEvents.put(startDate.toString(), new ArrayList<Shift>());
+				}
+				datesToEvents.get(startDate.toString()).add(shift);
+				startDate = startDate.plusDays(1);
+			}
+		}
+		
+		return datesToEvents;
 	}
 	
 	
