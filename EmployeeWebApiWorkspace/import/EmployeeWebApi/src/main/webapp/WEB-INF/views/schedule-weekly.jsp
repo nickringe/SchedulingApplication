@@ -75,6 +75,7 @@
 										<a href="/shift-details?id=${employee.id}&shiftId=${shift.id}">		
 										<div class="child"> ${shift.startTimeString} - ${shift.endTimeString}<br></div>
 										<div class="child"><div class="bold"> ${shift.shiftName} </div></div></a>
+										<div class="child">${shift.shiftLength} hours</div>
 								</c:forEach>
 							
 						</td>
@@ -82,7 +83,7 @@
 				</tr>
 			</table>
 		</div>
-		
+		<div class="boxCenterText"><div class="bold">Weekly Hours: </div> ${weeklyHours}</div>
 	
 
 	</body>

@@ -87,14 +87,14 @@ public class Shift {
 	public String getStartTimeString() {
 		String formattedDateTime = date + "T" + startTime;
 		LocalDateTime startString = LocalDateTime.parse(formattedDateTime);
-		return startString.format(DateTimeFormatter.ofPattern("hh:MM a"));
+		return startString.format(DateTimeFormatter.ofPattern("hh:mm a"));
 		
 	}
 	
 	public String getEndTimeString() {
 		String formattedDateTime = date + "T" + endTime;
 		LocalDateTime endString = LocalDateTime.parse(formattedDateTime);
-		return endString.format(DateTimeFormatter.ofPattern("hh:MM a"));
+		return endString.format(DateTimeFormatter.ofPattern("hh:mm a"));
 		
 	}
 	

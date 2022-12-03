@@ -3,23 +3,21 @@ package co.grandcircus.EmployeeWebApi.HomeController;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-//import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-//import co.grandcircus.EmployeeApi.EmployeeNotFoundException;
 import co.grandcircus.EmployeeWebApi.Model.Employee;
 import co.grandcircus.EmployeeWebApi.Model.Shift;
 import co.grandcircus.EmployeeWebApi.Service.EmployeeService;
@@ -30,6 +28,7 @@ public class EmployeeHomeController {
 	@Autowired
 	private EmployeeService service;
 
+	//displays all employees on the home page
 	@RequestMapping("/")
 	public String showEmployees(Model model) {
 		
@@ -44,6 +43,7 @@ public class EmployeeHomeController {
 		return "index";
 	}
 	
+	//display the page to create shifts
 	@RequestMapping("/create-shift")
 	public String showCreateShift(Model model) {
 		
@@ -65,7 +65,6 @@ public class EmployeeHomeController {
 		
 		String shiftAdded = shiftName + " Shift added on " + date;
 		
-		System.out.println("1. Got to initial method");
 		//if id is null, add to master schedule
 		if (id == null) {
 			//find Master schedule and create shift to be added
@@ -81,7 +80,6 @@ public class EmployeeHomeController {
 			masterSchedule.add(newShift);
 			master.setSchedule(masterSchedule);
 			
-			System.out.println("1a. Got to master schedule portion");
 			//saves updated shift to the database
 			service.updateEmployee("634c155f245151700ec73b89", master);
 			
@@ -91,7 +89,7 @@ public class EmployeeHomeController {
 			
 			return "create-shift";
 		}
-		System.out.println("1a. Got to employee portion");
+		
 		//else add to employee's schedule
 		Employee employee = service.getEmployee(id);
 		List<Shift> employeeSchedule = employee.getSchedule();
@@ -102,8 +100,6 @@ public class EmployeeHomeController {
 		employee.setSchedule(employeeSchedule);
 		
 		service.updateEmployee(id, employee);
-		
-		System.out.println("3. Got past the service method");
 		
 		model.addAttribute("employees", service.getAllEmployees());
 		model.addAttribute("shiftAdded", shiftAdded);
@@ -189,12 +185,38 @@ public class EmployeeHomeController {
 		return "add-employee";
 	}
 
+	//displays the update employee page
 	@RequestMapping("/form")
 	public String updateEmployee(Model model, @RequestParam(required = false) String id) {
 		model.addAttribute("employee", service.getEmployee(id));
 		return "employeeform";
 	}
+	
+	//updates a single shift
+	@PostMapping("/postShift")
+	public String saveShift(Model model, @RequestParam String id, @RequestParam String shiftId,
+			@RequestParam String shiftName, @RequestParam String date, @RequestParam String startTime,
+			@RequestParam String endTime) {
+		
+		Employee employee = service.getEmployee(id);
+		List<Shift> employeeSchedule = employee.getSchedule();
+		
+		for (Shift shift : employeeSchedule) {
+			if (shift.getId().equals(shiftId)) {
+				shift.setDate(date);
+				shift.setEndTime(endTime);
+				shift.setStartTime(startTime);
+				shift.setShiftName(shiftName);
+				shift.setShiftLength((double) ChronoUnit.HOURS.between(LocalDateTime.parse(date+"T"+startTime), LocalDateTime.parse(date+"T"+endTime)));
+				employee.setSchedule(employeeSchedule);
+				service.updateEmployee(id, employee);
+				return "redirect:/";
+			}
+		}
+		return "redirect:/";
+	}
 
+	//updates Employee Info
 	@PostMapping("/postEmployee")
 	public String saveEmployee(Model model, @RequestParam(required = false) String id,
 			@RequestParam(required = false) String firstname, @RequestParam(required = false) String lastname,
@@ -242,9 +264,60 @@ public class EmployeeHomeController {
 		return "redirect:/";
 	}
 
-	//returns a list of ALL shifts for one employee
+	//returns a list of ALL shifts for one employee in a given week
 	@RequestMapping("/schedule")
-	public String viewEmployeeSchedule(Model model, @RequestParam(required = false) String id) {
+	public String viewEmployeeSchedule(Model model, @RequestParam(required = false) String id,
+			@RequestParam(required = false) String date) {
+		
+//****************start import
+		// If page is entered with no params (clicking on weekly view instead of either
+		// of the arrows)
+		LocalDate today;
+		if (date == null) {
+			today = LocalDate.now();
+		} else {
+			today = LocalDate.parse(date);
+		}
+		date = today.toString();
+		String displayToday = LocalDate.now().toString();
+		model.addAttribute("displayToday", displayToday);
+		
+		// Stores the numbers to be printed for the current week
+		List<LocalDate> dates = new ArrayList<LocalDate>(7);
+		HashMap<String, ArrayList<Shift>> shifts;
+
+		// determines the day num of the current day, so that we can determine how many
+		// days to backpedal in order to point at sunday
+		int dayOffset = calculateDayOfWeek(today.getDayOfMonth(), today.getMonthValue(), today.getYear());
+		today = today.minusDays(dayOffset);
+
+		// Used for printing the correct day numbers of this week on the jsp
+		for (int i = 0; i < 7; i++) {
+			dates.add(today);
+			today = today.plusDays(1);
+		}
+		
+		shifts = service.getShiftsByTimeRangeAndId(dates.get(0).toString(), dates.get(dates.size() -1).toString(), id);
+		
+		// Set today to the first day of this week
+		today = today.minusDays(7);
+		model.addAttribute("curWeekDate", today);
+		model.addAttribute("curWeekMonthString", monthNumToString(today.getMonthValue()));
+		// Set today to next weeks date
+		today = today.plusDays(7);
+		model.addAttribute("nextWeekDate", today.toString());
+		// Set today to last weeks date
+		today = today.minusDays(14);
+		model.addAttribute("prevWeekDate", today.toString());
+		// Day numbers to be printed
+		model.addAttribute("dates", dates);
+		model.addAttribute("shifts", shifts);
+		
+		// Set today to curDay for daily info section
+		today = LocalDate.parse(date);
+		model.addAttribute("curDayDate", today);
+		model.addAttribute("curDayMonthString", monthNumToString(today.getMonthValue()));
+		//end import
 		model.addAttribute("employee", service.getEmployee(id));
 		model.addAttribute("firstname", service.getEmployee(id).getFirstname());
 		if (service.getEmployee(id).getSchedule() != null) {
@@ -291,8 +364,13 @@ public class EmployeeHomeController {
 				}
 				
 				shifts = service.getShiftsByTimeRangeAndId(dates.get(0).toString(), dates.get(dates.size() -1).toString(), id);
-			
-
+				Double weeklyHours = 0.00;
+				for (Map.Entry<String,ArrayList<Shift>> mapElement : shifts.entrySet()) {
+					weeklyHours += mapElement.getValue().get(0).getShiftLength();
+					
+				}
+				
+				model.addAttribute("weeklyHours", weeklyHours);
 				// Set today to the first day of this week
 				today = today.minusDays(7);
 				model.addAttribute("curWeekDate", today);
@@ -306,7 +384,7 @@ public class EmployeeHomeController {
 				// Day numbers to be printed
 				model.addAttribute("dates", dates);
 				model.addAttribute("shifts", shifts);
-				shifts.forEach((key, value) -> System.out.println(key.toString() + ":" + value.toString()));
+				
 				// Set today to curDay for daily info section
 				today = LocalDate.parse(date);
 				model.addAttribute("curDayDate", today);
@@ -454,7 +532,6 @@ public class EmployeeHomeController {
 			if (shift.getId().equals(shiftId)) {
 				employeeShifts.add(shift);
 				masterSchedule.remove(shift);
-				System.out.println("2");
 				employee.setSchedule(employeeShifts);
 				master.setSchedule(masterSchedule);
 				service.updateEmployee(id, employee);
@@ -519,6 +596,7 @@ public class EmployeeHomeController {
 		return "employee-details";
 	}
 	
+	//test method. use to test forms when needed
 	@RequestMapping("/test")
 	public String testDates(@RequestParam(required = false) String id,
 			@RequestParam(required = false) String shiftName, @RequestParam(required = false) String date,
@@ -581,7 +659,7 @@ public class EmployeeHomeController {
 		// Day numbers to be printed
 		model.addAttribute("dates", dates);
 		model.addAttribute("shifts", shifts);
-		shifts.forEach((key, value) -> System.out.println(key.toString() + ":" + value.toString()));
+		
 		// Set today to curDay for daily info section
 		today = LocalDate.parse(date);
 		model.addAttribute("curDayDate", today);
@@ -590,6 +668,7 @@ public class EmployeeHomeController {
 		return "weekly-calendar";
 	}
 	
+	//view shift details
 	@RequestMapping("/shift-details")
 	public String displayShiftDetails(Model model, @RequestParam String id,
 			@RequestParam String shiftId) {
@@ -604,6 +683,24 @@ public class EmployeeHomeController {
 		model.addAttribute("employee", employee);
 		
 		return "shift-details";
+		
+	}
+	
+	//show shift edit form
+	@RequestMapping("/shift-edit")
+	public String displayShiftEdits(Model model, @RequestParam String id,
+			@RequestParam String shiftId) {
+		
+		Employee employee = service.getEmployee(id);
+		for (Shift shift : employee.getSchedule()) {
+			if (shift.getId().equals(shiftId)) {
+				model.addAttribute("shift", shift);
+			}
+		}
+		
+		model.addAttribute("employee", employee);
+		
+		return "shift-edit";
 		
 	}
 	

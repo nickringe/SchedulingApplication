@@ -7,6 +7,7 @@
 	<head>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 		<link rel="stylesheet" href="styles.css">
+		<script src="https://kit.fontawesome.com/aa77e8e357.js"	crossorigin="anonymous"></script>
 		<meta charset="ISO-8859-1">
 		<title>Employee Schedule - List</title>
 	</head>
@@ -28,6 +29,22 @@
 			<a href="/schedule-weekly?id=${employee.id}" class="btn btn-info">Weekly View</a> &nbsp;
 			<a href="/add-shift?id=${employee.id }" class="btn btn-success">Add Shift</a>
 		</div> <br>
+		
+		<div class="month-navigation">
+
+			<a id="prevButton" href="/schedule?id=${employee.id }&date=${prevWeekDate}"><i
+				class="fa-solid fa-arrow-left"></i></a>&nbsp;
+
+			<!-- Gets current month and year as a String -->
+			<div>
+				Week of: ${curWeekMonthString} ${curWeekDate.dayOfMonth} ${curWeekDate.year}&nbsp;<br>
+				<div class="child"><a href="/schedule?id=${employee.id}" title="Go to Today"><i class="fa-solid fa-calendar-check"></i></a></div>
+			</div>
+
+			<a id="nextButton" href="/schedule?id=${employee.id }&date=${nextWeekDate}"><i
+				class="fa-solid fa-arrow-right"></i></a>
+
+		</div>
 
 		<c:if test="${not empty employee.schedule}">
 			<table class="table">
@@ -37,16 +54,18 @@
 					<th>Start Time:</th>
 					<th>End Time:</th>
 					<th>Shift Length (Hours):</th>
+					<th>Edit</th>
 					<th>Delete</th>
 				</tr>
-
+				
 				<c:forEach var="shift" items="${employee.schedule}">
 					<tr>
-						<td>${shift.dateString}</td>
+						<td><a href="/shift-details?id=${employee.id }&shiftId=${shift.id}">${shift.dateString}</a></td>
 						<td>${shift.shiftName}</td>
 						<td>${shift.startTimeString}</td>
 						<td>${shift.endTimeString}</td>
 						<td>${shift.shiftLength}</td>
+						<td><a href="/shift-edit?id=${employee.id}&shiftId=${shift.id}" class="btn btn-info">Edit</a></td>
 						<td>
 							<form action="/confirm-delete-shift">
 								<input type="hidden" value="${employee.id }" name="id" id="id">

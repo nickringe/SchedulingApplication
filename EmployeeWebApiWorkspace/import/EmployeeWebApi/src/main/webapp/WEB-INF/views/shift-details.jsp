@@ -41,6 +41,7 @@
 					<input type="submit" value="Delete" class="btn btn-danger"> 
 				</form>
 				<br>
+				<a href="/shift-edit?id=${employee.id}&shiftId=${shift.id}" class="btn btn-success">Edit</a><br><br>
 				<a href="/schedule-weekly?id=${employee.id }" class="btn btn-primary active">Go Back</a>
 				<br>
 				<br>

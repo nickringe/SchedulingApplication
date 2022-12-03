@@ -3,6 +3,7 @@ package co.grandcircus.EmployeeApi.Model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 
 //web api model (8080)
@@ -22,7 +23,8 @@ public class Shift {
 		this.shiftName = shiftName;
 		this.date = date;
 		this.startTime = startTime;
-		this.endTime = endTime;		
+		this.endTime = endTime;
+		this.shiftLength = (double) ChronoUnit.HOURS.between(LocalDateTime.parse(date+"T"+startTime), LocalDateTime.parse(date+"T"+	endTime));
 	}
 
 	public String getShiftName() {
@@ -84,14 +86,14 @@ public class Shift {
 	public String getStartTimeString() {
 		String formattedDateTime = date + "T" + startTime;
 		LocalDateTime startString = LocalDateTime.parse(formattedDateTime);
-		return startString.format(DateTimeFormatter.ofPattern("hh:MM a"));
+		return startString.format(DateTimeFormatter.ofPattern("hh:mm a"));
 		
 	}
 	
 	public String getEndTimeString() {
 		String formattedDateTime = date + "T" + endTime;
 		LocalDateTime endString = LocalDateTime.parse(formattedDateTime);
-		return endString.format(DateTimeFormatter.ofPattern("hh:MM a"));
+		return endString.format(DateTimeFormatter.ofPattern("hh:mm a"));
 		
 	}
 	
