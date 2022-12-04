@@ -58,8 +58,9 @@
 					<th>Delete</th>
 				</tr>
 				
-				<c:forEach var="shift" items="${employee.schedule}">
+				<c:forEach var="shift" items="${shifts}">
 					<tr>
+					
 						<td><a href="/shift-details?id=${employee.id }&shiftId=${shift.id}">${shift.dateString}</a></td>
 						<td>${shift.shiftName}</td>
 						<td>${shift.startTimeString}</td>
@@ -77,14 +78,10 @@
 								<input type="hidden" value="${shift.shiftLength }" name="shiftLength" id="shiftLength">
 							<input type="submit" value="Delete" class="btn btn-danger">
 							</form>
-						</td>
+						</td> 
 					</tr>
 				</c:forEach>
 			</table>
-			
-			<div class="text-center">
-				<b>Total Hours:</b> ${totalHours}
-			</div>
 		</c:if>
 	
 

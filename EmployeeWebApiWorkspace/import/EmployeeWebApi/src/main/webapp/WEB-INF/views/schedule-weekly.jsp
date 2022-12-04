@@ -83,7 +83,7 @@
 				</tr>
 			</table>
 		</div>
-		<div class="boxCenterText"><div class="bold">Weekly Hours: </div> ${weeklyHours}</div>
+		
 	
 
 	</body>

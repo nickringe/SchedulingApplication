@@ -176,6 +176,33 @@ public class EmployeeController {
 		return datesToEvents;
 	}
 	
+	@GetMapping("/shiftlist/{start}/{end}/{id}")
+	public ArrayList<Shift> getShiftsBetweenTimesWithId(@PathVariable("start") String start, @PathVariable("end") String end,
+			@PathVariable("id") String id){
+	
+		Employee employee = repo.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
+
+		ArrayList<Shift> shifts = new ArrayList<>();
+		
+
+		LocalDate shiftDate;
+		
+		
+		for(Shift shift : employee.getSchedule()) {
+			//Start and end of current object
+			shiftDate = LocalDateTime.parse(shift.getDate() + "T" + shift.getStartTime()).toLocalDate();
+			
+			if ((shiftDate.isEqual(LocalDate.parse(start))) 
+					|| (shiftDate.isAfter(LocalDate.parse(start)) && shiftDate.isBefore(LocalDate.parse(end))) 
+					|| (shiftDate.isEqual(LocalDate.parse(end)))){
+				shifts.add(shift);
+			}
+			
+		}
+		
+		return shifts;
+	}
+	
 	
 	@ResponseBody
 	@ExceptionHandler(EmployeeNotFoundException.class)

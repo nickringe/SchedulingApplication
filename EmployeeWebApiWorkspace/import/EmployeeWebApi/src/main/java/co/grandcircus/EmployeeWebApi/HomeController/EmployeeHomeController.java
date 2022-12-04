@@ -284,8 +284,8 @@ public class EmployeeHomeController {
 		
 		// Stores the numbers to be printed for the current week
 		List<LocalDate> dates = new ArrayList<LocalDate>(7);
-		HashMap<String, ArrayList<Shift>> shifts;
 
+		List<Shift> shifts = new ArrayList<>();
 		// determines the day num of the current day, so that we can determine how many
 		// days to backpedal in order to point at sunday
 		int dayOffset = calculateDayOfWeek(today.getDayOfMonth(), today.getMonthValue(), today.getYear());
@@ -297,7 +297,7 @@ public class EmployeeHomeController {
 			today = today.plusDays(1);
 		}
 		
-		shifts = service.getShiftsByTimeRangeAndId(dates.get(0).toString(), dates.get(dates.size() -1).toString(), id);
+		shifts = service.listShiftsByTimeRangeAndId(dates.get(0).toString(), dates.get(dates.size() -1).toString(), id);	
 		
 		// Set today to the first day of this week
 		today = today.minusDays(7);
@@ -317,13 +317,10 @@ public class EmployeeHomeController {
 		today = LocalDate.parse(date);
 		model.addAttribute("curDayDate", today);
 		model.addAttribute("curDayMonthString", monthNumToString(today.getMonthValue()));
-		//end import
+
 		model.addAttribute("employee", service.getEmployee(id));
 		model.addAttribute("firstname", service.getEmployee(id).getFirstname());
-		if (service.getEmployee(id).getSchedule() != null) {
-			
-			model.addAttribute("totalHours", service.getEmployee(id).getTotalHours());
-		}
+		
 		return "schedule";
 	}
 	

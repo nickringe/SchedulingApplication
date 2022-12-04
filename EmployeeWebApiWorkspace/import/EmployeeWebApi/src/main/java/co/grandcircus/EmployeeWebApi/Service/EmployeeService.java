@@ -3,6 +3,8 @@ package co.grandcircus.EmployeeWebApi.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -49,13 +51,6 @@ public class EmployeeService {
 		request.put(url, employee, id);
 	}
 	
-//	public void updateEmployeeSchedule(Shift employeeShift, String id) {
-//		System.out.println("Made it into the Service");
-//		url = baseUrl + "/update/{id}";
-//		request.put(url, employeeShift, id);
-//		System.out.println("Made it through Service");
-//	}
-	
 	public void deleteShift(String shiftId, String id) {
 		url = baseUrl + "/delete/" + shiftId + "/" + id;
 		request.delete(url, shiftId, id);
@@ -81,6 +76,13 @@ public class EmployeeService {
 		
 		RequestEntity<Void> request1 = RequestEntity.get(url).accept(MediaType.APPLICATION_JSON).build();
 		HashMap<String, ArrayList<Shift>> response = request.exchange(request1, responseType).getBody();
+		return response;
+	}
+	
+	public ArrayList<Shift> listShiftsByTimeRangeAndId(String start, String end, String id) {
+		String url = baseUrl + "/shiftlist/" + start + "/" + end + "/" + id;
+		@SuppressWarnings("unchecked")
+		ArrayList<Shift> response = request.getForObject(url, ArrayList.class);
 		return response;
 	}
 
