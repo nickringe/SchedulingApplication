@@ -28,7 +28,16 @@
 			<a href="/schedule?id=${employee.id}" class="btn btn-info">List View</a> &nbsp;
 			<a href="#0" class="btn btn-primary">Weekly View</a> &nbsp;
 			<a href="/add-shift?id=${employee.id }" class="btn btn-success">Add Shift</a>
-		</div> <br>
+		</div> 
+		<br><br>
+		<div class ="child">Search by Date:</div>
+		<div class ="child">
+			<form action="/schedule-weekly" class="form-group">
+				<input type="hidden" value="${employee.id }" name="id" id="id">
+				<input type="date" name="date" id="date">
+				<input type="submit" value="Search" class="btn btn-info active">
+			</form>
+		</div>
 		
 		<div class="month-navigation">
 
