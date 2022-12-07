@@ -22,7 +22,7 @@
 			<a href="/create-shift" class="btn btn-info">Create New Shifts</a>
 			<a href="/add-employee" class="btn btn-info">Add Employee</a> <br><br>
 			<div class="text-center"><h3>${shiftRemoved}</h3></div>
-			<h2>Schedule for ${employee.firstname} ${employee.lastname}</h2>
+			<h2><a href="/schedule?id=${prevId}"><i class="fas fa-angle-left"></i></a> Schedule for ${employee.firstname} ${employee.lastname} <a href="/schedule?id=${nextId}"><i class="fas fa-angle-right"></i></a></h2> 
 		</div>
 		<div class="child">
 			<a href="#0" class="btn btn-primary">List View</a> &nbsp;

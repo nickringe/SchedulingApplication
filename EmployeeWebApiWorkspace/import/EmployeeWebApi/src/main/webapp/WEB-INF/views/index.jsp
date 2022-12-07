@@ -54,16 +54,6 @@
 							<input type="submit" value="Delete" class="btn btn-danger">
 						</form>
 					</td>
-					<%-- <td class="text-center"><a href="/delete?id=${emp.id}"><i class="fa-solid fa-trash"></i></a></td> --%>
-						<!-- <td><button onclick="myFunction()" type="button" class="btn-danger">Delete</button>
-						<script>
-							function myFunction() {
-  								if (confirm("Are you sure you want to delete this employee?")) {
-	 								location.href = "/delete?id=${emp.id}";
-  									} 
-								}
-						</script>
-						</td> -->
 				</tr>
 			</c:forEach>
 		</table>

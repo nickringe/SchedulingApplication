@@ -269,7 +269,6 @@ public class EmployeeHomeController {
 	public String viewEmployeeSchedule(Model model, @RequestParam(required = false) String id,
 			@RequestParam(required = false) String date) {
 		
-//****************start import
 		// If page is entered with no params (clicking on weekly view instead of either
 		// of the arrows)
 		LocalDate today;
@@ -321,6 +320,35 @@ public class EmployeeHomeController {
 		model.addAttribute("employee", service.getEmployee(id));
 		model.addAttribute("firstname", service.getEmployee(id).getFirstname());
 		
+		//for arrows that select previous and next employees
+		ArrayList<Employee> sortedList = new ArrayList<>();
+		for (Employee employee : service.getAllEmployees()) {
+			sortedList.add(employee);
+		}
+		Collections.sort(sortedList, Comparator.comparing(Employee::getLastname));
+		for (int i = 0; i <= sortedList.size()-1; i++) {
+			if (sortedList.get(i).getId().equals(id)) {
+				if(i == sortedList.size()-1) {
+					String nextId = sortedList.get(0).getId();
+					String prevId = sortedList.get(i-1).getId();
+					model.addAttribute("nextId", nextId);
+					model.addAttribute("prevId", prevId);
+				} 
+				else if (i == 0) {
+					String prevId = sortedList.get(sortedList.size()-1).getId();
+					String nextId = sortedList.get(i+1).getId();
+					model.addAttribute("nextId", nextId);
+					model.addAttribute("prevId", prevId);
+				} else {
+					String nextId = sortedList.get(i+1).getId();
+					String prevId = sortedList.get(i-1).getId();
+					model.addAttribute("nextId", nextId);
+					model.addAttribute("prevId", prevId);
+				}
+				
+			}	
+				}
+		
 		return "schedule";
 	}
 	
@@ -328,6 +356,8 @@ public class EmployeeHomeController {
 	@RequestMapping("/schedule-weekly")
 	public String viewWeeklyEmployeeSchedule(Model model, @RequestParam(required = false) String id,
 			@RequestParam(required = false) String date) {
+		
+		
 		model.addAttribute("employee", service.getEmployee(id));
 		model.addAttribute("firstname", service.getEmployee(id).getFirstname());
 		if (service.getEmployee(id).getSchedule() != null) {
@@ -366,6 +396,35 @@ public class EmployeeHomeController {
 					weeklyHours += mapElement.getValue().get(0).getShiftLength();
 					
 				}
+				
+				//for arrows that select previous and next employees
+				ArrayList<Employee> sortedList = new ArrayList<>();
+				for (Employee employee : service.getAllEmployees()) {
+					sortedList.add(employee);
+				}
+				Collections.sort(sortedList, Comparator.comparing(Employee::getLastname));
+				for (int i = 0; i <= sortedList.size()-1; i++) {
+					if (sortedList.get(i).getId().equals(id)) {
+						if(i == sortedList.size()-1) {
+							String nextId = sortedList.get(0).getId();
+							String prevId = sortedList.get(i-1).getId();
+							model.addAttribute("nextId", nextId);
+							model.addAttribute("prevId", prevId);
+						} 
+						else if (i == 0) {
+							String prevId = sortedList.get(sortedList.size()-1).getId();
+							String nextId = sortedList.get(i+1).getId();
+							model.addAttribute("nextId", nextId);
+							model.addAttribute("prevId", prevId);
+						} else {
+							String nextId = sortedList.get(i+1).getId();
+							String prevId = sortedList.get(i-1).getId();
+							model.addAttribute("nextId", nextId);
+							model.addAttribute("prevId", prevId);
+						}
+						
+					}	
+						}
 				
 				model.addAttribute("weeklyHours", weeklyHours);
 				// Set today to the first day of this week
