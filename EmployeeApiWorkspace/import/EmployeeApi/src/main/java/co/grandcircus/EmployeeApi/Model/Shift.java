@@ -15,6 +15,8 @@ public class Shift {
 	private String startTime;
 	private String endTime;
 	private Double shiftLength;
+	private String shiftOwner;
+	private String shiftOwnerId;
 	
 	public Shift() {
 	}
@@ -95,6 +97,22 @@ public class Shift {
 		LocalDateTime endString = LocalDateTime.parse(formattedDateTime);
 		return endString.format(DateTimeFormatter.ofPattern("hh:mm a"));
 		
+	}
+
+	public String getShiftOwner() {
+		return shiftOwner;
+	}
+
+	public void setShiftOwner(String shiftOwner) {
+		this.shiftOwner = shiftOwner;
+	}
+
+	public String getShiftOwnerId() {
+		return shiftOwnerId;
+	}
+
+	public void setShiftOwnerId(String shiftOwnerId) {
+		this.shiftOwnerId = shiftOwnerId;
 	}
 	
 	

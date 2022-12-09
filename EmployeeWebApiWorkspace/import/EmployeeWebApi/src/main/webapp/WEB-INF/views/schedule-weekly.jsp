@@ -22,7 +22,7 @@
 			<a href="/create-shift" class="btn btn-info">Create New Shifts</a>
 			<a href="/add-employee" class="btn btn-info">Add Employee</a> <br><br>
 			<div class="text-center"><h3>${shiftRemoved}</h3></div>
-			<h2><a href="/schedule?id=${prevId}&date=${curDayDate}"><i class="fas fa-angle-left"></i></a>Schedule for ${employee.firstname} ${employee.lastname} <a href="/schedule?id=${nextId}&date=${curDayDate}"><i class="fas fa-angle-right"></i></a></h2>
+			<h2><a href="/schedule?id=${prevId}&date=${curDayDate}"><i class="fas fa-caret-left"></i></a>Schedule for ${employee.firstname} ${employee.lastname} <a href="/schedule?id=${nextId}&date=${curDayDate}"><i class="fas fa-caret-right"></i></a></h2>
 		</div>
 		<div class="child">
 			<a href="/schedule?id=${employee.id}&date=${curDayDate}" class="btn btn-info">List View</a> &nbsp;
@@ -93,7 +93,6 @@
 			</table>
 		</div>
 		
-	
 
 	</body>
 </html>

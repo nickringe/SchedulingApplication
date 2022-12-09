@@ -64,9 +64,11 @@ public class EmployeeHomeController {
 			@RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime) {
 		
 		String shiftAdded = shiftName + " Shift added on " + date;
+		System.out.println("-->" + id);
 		
 		//if id is null, add to master schedule
-		if (id == null) {
+		if (id == "") {
+			System.out.println("1 -->" + id);
 			//find Master schedule and create shift to be added
 			Employee master = service.getEmployee("634c155f245151700ec73b89");
 			List<Shift> masterSchedule = master.getSchedule();
@@ -75,6 +77,8 @@ public class EmployeeHomeController {
 			//generate a random Employee ID and set it
 			Integer random_int = (int)Math.floor(Math.random()*(99999999-10000000+1)+10000000);
 			newShift.setId(random_int.toString());
+			newShift.setShiftOwner("Master Schedule");
+			newShift.setShiftOwnerId("634c155f245151700ec73b89");
 			
 			//add the completed shift to the Master Schedule, set Master schedule
 			masterSchedule.add(newShift);
@@ -86,16 +90,19 @@ public class EmployeeHomeController {
 			model.addAttribute("employees", service.getAllEmployees());
 			model.addAttribute("shiftAdded", shiftAdded);
 			
-			
+			System.out.println("2 -->" + id);
 			return "create-shift";
+			
 		}
-		
+		System.out.println("3 -->" + id);
 		//else add to employee's schedule
 		Employee employee = service.getEmployee(id);
 		List<Shift> employeeSchedule = employee.getSchedule();
 		Shift newEmployeeShift = new Shift(shiftName, date, startTime, endTime);
 		Integer random_int = (int)Math.floor(Math.random()*(99999999-10000000+1)+10000000);
 		newEmployeeShift.setId(random_int.toString());
+		newEmployeeShift.setShiftOwner(employee.getFirstname() + " " + employee.getLastname());
+		newEmployeeShift.setShiftOwnerId(id);
 		employeeSchedule.add(newEmployeeShift);
 		employee.setSchedule(employeeSchedule);
 		
@@ -393,7 +400,12 @@ public class EmployeeHomeController {
 				shifts = service.getShiftsByTimeRangeAndId(dates.get(0).toString(), dates.get(dates.size() -1).toString(), id);
 				Double weeklyHours = 0.00;
 				for (Map.Entry<String,ArrayList<Shift>> mapElement : shifts.entrySet()) {
-					weeklyHours += mapElement.getValue().get(0).getShiftLength();
+					if (shifts.size() == 0) {
+						weeklyHours = 0.00;
+					} else {
+						
+						weeklyHours = weeklyHours + mapElement.getValue().get(0).getShiftLength();
+					}
 					
 				}
 				

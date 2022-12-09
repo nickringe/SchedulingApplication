@@ -75,7 +75,6 @@ public class EmployeeController {
 	@DeleteMapping("/delete/{shiftId}/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteShift(@PathVariable String shiftId, @PathVariable String id) {
-		System.out.println("1. Made it to 8080 API");
 		List<Shift> shiftList = repo.findById(id).get().getSchedule();
 		for (Shift shift : shiftList) {
 			
@@ -96,9 +95,7 @@ public class EmployeeController {
 	
 	@PutMapping("/update/{id}")
 	public void updateEmployeeSchedule(@RequestBody Shift employeeShift, @PathVariable("id") String id) {
-		System.out.println("1. Made it to 8080 API... id: " + id);
 		repo.updateById(id, employeeShift.getShiftName(), employeeShift.getDate(), employeeShift.getStartTime(), employeeShift.getEndTime());
-		System.out.println("2. Made it through repo.updateById to end of 8080 API");
 	}
 	
 	@GetMapping("/shift/{start}/{end}")
@@ -147,7 +144,7 @@ public class EmployeeController {
 			shifts.add(employeeShift);
 		}
 		
-		HashMap<String, ArrayList<Shift>> datesToEvents = new HashMap<String, ArrayList<Shift>>();
+		HashMap<String, ArrayList<Shift>> datesToShifts = new HashMap<String, ArrayList<Shift>>();
 		LocalDate startDate;
 		LocalDate endDate;
 		
@@ -157,23 +154,23 @@ public class EmployeeController {
 			endDate = LocalDateTime.parse(shift.getDate() + "T" + 
 			shift.getEndTime()).toLocalDate();
 			
-			//Put the current even in the list contained under the startdate key
-			if(!datesToEvents.containsKey(startDate.toString())) {
-				datesToEvents.put(startDate.toString(), new ArrayList<Shift>());
+			//Put the current shift in the list contained under the startDate key
+			if(!datesToShifts.containsKey(startDate.toString())) {
+				datesToShifts.put(startDate.toString(), new ArrayList<Shift>());
 			}
-			datesToEvents.get(startDate.toString()).add(shift);
+			datesToShifts.get(startDate.toString()).add(shift);
 			startDate = startDate.plusDays(1);
 			
 			while(startDate.isBefore(endDate) || startDate.isEqual(endDate)) {
-				if(!datesToEvents.containsKey(startDate.toString())) {
-					datesToEvents.put(startDate.toString(), new ArrayList<Shift>());
+				if(!datesToShifts.containsKey(startDate.toString())) {
+					datesToShifts.put(startDate.toString(), new ArrayList<Shift>());
 				}
-				datesToEvents.get(startDate.toString()).add(shift);
+				datesToShifts.get(startDate.toString()).add(shift);
 				startDate = startDate.plusDays(1);
 			}
 		}
 		
-		return datesToEvents;
+		return datesToShifts;
 	}
 	
 	@GetMapping("/shiftlist/{start}/{end}/{id}")

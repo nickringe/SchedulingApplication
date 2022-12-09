@@ -22,7 +22,11 @@
 			<a href="/create-shift" class="btn btn-info">Create New Shifts</a>
 			<a href="/add-employee" class="btn btn-info">Add Employee</a> <br><br>
 			<div class="text-center"><h3>${shiftRemoved}</h3></div>
-			<h2><a href="/schedule?id=${prevId}&date=${curDayDate}"><i class="fas fa-angle-left"></i></a> Schedule for ${employee.firstname} ${employee.lastname} <a href="/schedule?id=${nextId}&date=${curDayDate} "><i class="fas fa-angle-right"></i></a></h2> 
+			<h2>
+				<a href="/schedule?id=${prevId}&date=${curDayDate}"><i class="fas fa-caret-left"></i></a> 
+				Schedule for ${employee.firstname} ${employee.lastname} 
+				<a href="/schedule?id=${nextId}&date=${curDayDate} "><i class="fas fa-caret-right"></i></a>
+			</h2> 
 		</div>
 		<div class="child">
 			<a href="#0" class="btn btn-primary">List View</a> &nbsp;
@@ -91,6 +95,8 @@
 				</c:forEach>
 			</table>	
 		</c:if>
+		
+		${weeklyHours }
 	
 
 		<c:if test="${empty employee.schedule}">There are no shifts to display!</c:if>

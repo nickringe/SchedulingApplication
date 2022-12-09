@@ -64,13 +64,18 @@
 						varStatus="loop">
 
 						<td>
-							<a href="/weekly-calendar?date=${date}">
 								${date.dayOfMonth}
-							</a>
+							
 							<br>
 								<c:set var="dateString">${date.toString()}</c:set>
-								<c:forEach var="shift" items="${shifts[dateString]}">								
-									${shift.shiftName} ${shift.startTimeString} - ${shift.endTimeString}<br>
+								<c:forEach var="shift" items="${shifts[dateString]}">
+									<a href="/shift-details?id=${shift.shiftOwnerId}&shiftId=${shift.id}">
+										<div class="child">${shift.shiftOwner}</div>
+										<div class="child"> ${shift.startTimeString} - ${shift.endTimeString}</div>								
+										<div class="child"><div class="bold">${shift.shiftName}
+										</div></div>
+									</a>
+								<br>
 								</c:forEach>
 							
 						</td>
