@@ -1,68 +1,72 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="ISO-8859-1">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 		<link rel="stylesheet" href="styles.css">
 		<script src="https://kit.fontawesome.com/aa77e8e357.js"	crossorigin="anonymous"></script>
-		<meta charset="ISO-8859-1">
-		<title>Employee Schedule - List</title>
+		<title>Weekly Schedule - List</title>
 	</head>
 	<body>
 		<header class="header">
 			<h1>Scheduling App</h1> 
 		</header>
-	<br>
+			<br>
 		<div class="text-center">
 			<a href="/" class="btn btn-info">Home</a>
 			<a href="/weekly-calendar" class="btn btn-info">View Schedule</a>	
 			<a href="/create-shift" class="btn btn-info">Create New Shifts</a>
 			<a href="/add-employee" class="btn btn-info">Add Employee</a> <br><br>
 			<div class="text-center"><h3>${shiftRemoved}</h3></div>
-			<h2>
-				<a href="/schedule?id=${prevId}&date=${curDayDate}"><i class="fas fa-caret-left"></i></a> 
-				Schedule for ${employee.firstname} ${employee.lastname} 
-				<a href="/schedule?id=${nextId}&date=${curDayDate} "><i class="fas fa-caret-right"></i></a>
-			</h2> 
+			<h2>Weekly Schedule - List</h2>
 		</div>
 		<div class="child">
-			<a href="#0" class="btn btn-primary">List View</a> &nbsp;
-			<a href="/schedule-weekly?id=${employee.id}&date=${curDayDate}" class="btn btn-info">Weekly View</a> &nbsp;
-			<a href="/add-shift?id=${employee.id }" class="btn btn-success">Add Shift</a>
-		</div>
+			<a href="#0" class="btn btn-primary active">List View</a> &nbsp;
+			<a href="/weekly-calendar" class="btn btn-info">Weekly View</a> &nbsp;
+			<a href="/create-shift" class="btn btn-success">Add Shift</a>
+		</div> 
 		<br><br>
 		<div class ="child">Search by Date:</div>
 		<div class ="child">
-			<form action="/schedule" class="form-group">
+			<form action="" class="form-group">
 				<input type="hidden" value="${employee.id }" name="id" id="id">
 				<input type="date" name="date" id="date" required>
 				<input type="submit" value="Search" class="btn btn-info active">
 			</form>
 		</div>
+		
 		<div class="month-navigation">
 
-			<a id="prevButton" href="/schedule?id=${employee.id }&date=${prevWeekDate}"><i
+			<a id="prevButton" href="#0"><i
 				class="fa-solid fa-arrow-left"></i></a>&nbsp;
 
 			<!-- Gets current month and year as a String -->
 			<div>
 				Week of: ${curWeekMonthString} ${curWeekDate.dayOfMonth} ${curWeekDate.year}&nbsp;<br>
-				<div class="child"><a href="/schedule?id=${employee.id}" title="Go to Today"><i class="fa-solid fa-calendar-check"></i></a></div>
+				<div class="child"><a href="#0" title="Go to Today"><i class="fa-solid fa-calendar-check"></i></a></div>
 			</div>
 
-			<a id="nextButton" href="/schedule?id=${employee.id }&date=${nextWeekDate}"><i
+			<a id="nextButton" href="#0"><i
 				class="fa-solid fa-arrow-right"></i></a>
 
 		</div>
-		
-		<c:if test="${not empty employee.schedule}">
+				<div class="child">
+					<a href="#0" class="btn1 btn-primary ">Sunday</a> &nbsp;
+					<a href="#0" class="btn1 btn-primary ">Monday</a> &nbsp;
+					<a href="#0" class="btn1 btn-primary ">Tuesday</a> &nbsp;
+					<a href="#0" class="btn1 btn-primary ">Wednesday</a> &nbsp;
+					<a href="#0" class="btn1 btn-primary ">Thursday</a> &nbsp;
+					<a href="#0" class="btn1 btn-primary ">Friday</a> &nbsp;
+					<a href="#0" class="btn1 btn-primary ">Saturday</a>&nbsp;
+					</div>
+			<div class="child"><h4>${dayNum}</h4></div>
+			<c:if test="${not empty employee.schedule}">
 			<table class="table">
-				<tr style="color: white;
-	background-color:#0275d8;
-	background-image: linear-gradient(#014c8c, #0275d8);">
+				<tr>
 					<th>Date:</th>
 					<th>Shift Name:</th>
 					<th>Start Time:</th>
@@ -97,8 +101,7 @@
 				</c:forEach>
 			</table>	
 		</c:if>
-	
+		
 
-		<c:if test="${empty employee.schedule}">There are no shifts to display!</c:if>
 	</body>
 </html>

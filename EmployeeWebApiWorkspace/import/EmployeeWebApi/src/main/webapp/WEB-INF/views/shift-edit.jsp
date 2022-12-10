@@ -25,7 +25,9 @@
 		</div>
 		
 		<div class="box">
+		<div class="child">
 			<form class="form" action="/postShift" method="post">
+			<br>
 				<input type="hidden" value="${employee.id }" name="id">
 				<input type="hidden" value="${shift.id }" name="shiftId">
 				<div class="bold">Shift Name: </div><input type="text" value="${shift.shiftName}" name="shiftName"><br><br>
@@ -37,9 +39,9 @@
 						<input type="submit" class="btn-success" value="Save Changes"> &nbsp;&nbsp;&nbsp;
 						<button onclick="window.location.href='/shift-details?id=${employee.id}&shiftId=${shift.id}'" type="button" class="btn-danger">Cancel</button>
 					</div>
-				<br>
+				
 			</form>
-		
+		</div>
 		</div>
 	</body>
 </html>

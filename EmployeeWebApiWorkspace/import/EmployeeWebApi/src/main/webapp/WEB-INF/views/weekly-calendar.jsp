@@ -24,7 +24,22 @@
 		</div>
 
 		<br>
-		<h2 class="text-center">Weekly Schedule</h2>
+		<h2 class="text-center">Weekly Schedule - Calendar</h2>
+		<div class="child">
+			<a href="/weekly-calendar-list" class="btn btn-info">List View</a> &nbsp;
+			<a href="#0" class="btn btn-primary active">Weekly View</a> &nbsp;
+			<a href="/create-shift" class="btn btn-success">Add Shift</a>
+		</div> 
+		<br><br>
+		<div class ="child">Search by Date:</div>
+		<div class ="child">
+			<form action="" class="form-group">
+				<input type="hidden" value="${employee.id }" name="id" id="id">
+				<input type="date" name="date" id="date" required>
+				<input type="submit" value="Search" class="btn btn-info active">
+			</form>
+		</div>
+		
 	
 	<!-- Calendar Grid -->
 	
@@ -48,17 +63,16 @@
 			<table class="table table-bordered">
 				<!-- Table Header (row 6) -->
 				<tr>
-					<th style="width: 14%">Sunday</th>
-					<th style="width: 14%">Monday</th>
-					<th style="width: 14%">Tuesday</th>
-					<th style="width: 14%">Wednesday</th>
-					<th style="width: 14%">Thursday</th>
-					<th style="width: 14%">Friday</th>
-					<th style="width: 14%">Saturday</th>
+					<th style="width: 14%" class="cal">Sunday</th>
+					<th style="width: 14%" class="cal">Monday</th>
+					<th style="width: 14%" class="cal">Tuesday</th>
+					<th style="width: 14%" class="cal">Wednesday</th>
+					<th style="width: 14%" class="cal">Thursday</th>
+					<th style="width: 14%" class="cal">Friday</th>
+					<th style="width: 14%" class="cal">Saturday</th>
 				</tr>
 
 				<!-- Week -->
-
 				<tr style="background-color: #e6eeff" class="col">
 					<c:forEach var="date" items="${dates}" begin="0" end="6"
 						varStatus="loop">

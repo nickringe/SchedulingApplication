@@ -23,6 +23,7 @@ public class EmployeeController {
 	@Autowired
 	EmployeeRepository repo;
 	
+	//returns a list of all Employees
 	@GetMapping("/")
 	public List<Employee> listAllEmployees(){
 		List<Employee> returnList = repo.findAll();
@@ -35,6 +36,7 @@ public class EmployeeController {
 		return returnList;
 	}
 	
+	//returns a list of all unassigned shifts ie Master Schedule
 	@GetMapping("/master")
 	public List<Shift> displayMasterSchedule() {
 		Employee masterEmployee = repo.findById("634c155f245151700ec73b89").orElseThrow(() -> new EmployeeNotFoundException("634c155f245151700ec73b89"));
@@ -46,11 +48,13 @@ public class EmployeeController {
 		return masterList;
 	}
 	
+	//returns a single employee
 	@GetMapping("/{id}")
 	public Employee getOneEmployee(@PathVariable("id") String id) {
 		return repo.findById(id).orElseThrow(() -> new EmployeeNotFoundException(id));
 	}
 	
+	//creates a new employee
 	@PostMapping("/") 
 	@ResponseStatus(HttpStatus.CREATED)
 	public Employee createEmployee(@RequestBody Employee employee, Model model) {
@@ -65,13 +69,14 @@ public class EmployeeController {
 		return repo.insert(employee);
 	}
 	
+	//deletes an employee by id
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteEmployee(@PathVariable("id")String id) {
 		repo.deleteById(id);
 	}
 	
-	
+	//deletes a shift based on id and shiftId
 	@DeleteMapping("/delete/{shiftId}/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteShift(@PathVariable String shiftId, @PathVariable String id) {
@@ -87,17 +92,20 @@ public class EmployeeController {
 			
 	}
 	
+	//updates an employee
 	@PutMapping("/{id}")
 	public Employee updateEmployee(@RequestBody Employee employee, @PathVariable("id") String id) {
 		employee.setId(id);
 		return repo.save(employee);
 	}
 	
+	//updates an employee's shift/schedule
 	@PutMapping("/update/{id}")
 	public void updateEmployeeSchedule(@RequestBody Shift employeeShift, @PathVariable("id") String id) {
 		repo.updateById(id, employeeShift.getShiftName(), employeeShift.getDate(), employeeShift.getStartTime(), employeeShift.getEndTime());
 	}
 	
+	//returns all shifts for each employee. stores in HASH MAP
 	@GetMapping("/shift/{start}/{end}")
 	public HashMap<String, ArrayList<Shift>> getShiftsBetween(@PathVariable("start") String start, @PathVariable("end") String end){
 		List<Shift> shifts = new ArrayList<>();
@@ -135,6 +143,7 @@ public class EmployeeController {
 		return datesToEvents;
 	}
 	
+	//returns all shifts for each employee with id. stores in HASH MAP
 	@GetMapping("/shift/{start}/{end}/{id}")
 	public HashMap<String, ArrayList<Shift>> getShiftsBetweenWithId(@PathVariable("start") String start, @PathVariable("end") String end,
 			@PathVariable("id") String id){
@@ -173,6 +182,7 @@ public class EmployeeController {
 		return datesToShifts;
 	}
 	
+	//returns a List of all shifts for each employee between two times.
 	@GetMapping("/shiftlist/{start}/{end}/{id}")
 	public ArrayList<Shift> getShiftsBetweenTimesWithId(@PathVariable("start") String start, @PathVariable("end") String end,
 			@PathVariable("id") String id){
@@ -198,6 +208,30 @@ public class EmployeeController {
 		}
 		
 		return shifts;
+	}
+	
+	//returns a HASH MAP of all employees shifts based on start/end time
+	@GetMapping("/shiftlist/{start}/{end}")
+	public HashMap<String, ArrayList<Shift>> getShiftsBetweenTimes(String start, String end) {
+		System.out.println(start);
+		List<Employee> employeeList = repo.findAll();
+		HashMap<String, ArrayList<Shift>> shiftList = new HashMap<>();
+		System.out.println("HERE: " + LocalDate.parse(start).plusDays(1).toString());
+		String nextDay = LocalDate.parse(start).plusDays(1).toString();
+		
+		for(Employee employee : employeeList) {
+			for(Shift shift : employee.getSchedule()) {
+				System.out.println("LD.parse shift.getstarttime: " + LocalDate.parse(shift.getStartTime()));
+				System.out.println("LD.parse start: " + LocalDate.parse(start));
+				if (LocalDate.parse(shift.getStartTime()).isEqual(LocalDate.parse(start))
+						|| (LocalDate.parse(shift.getStartTime()).isAfter(LocalDate.parse(start))
+								&& LocalDate.parse(shift.getEndTime()).isBefore(LocalDate.parse(nextDay)))) {
+					shiftList.put(start, new ArrayList<Shift>());
+				}
+			}
+		}
+		
+		return shiftList;
 	}
 	
 	

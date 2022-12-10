@@ -43,7 +43,7 @@ public class EmployeeHomeController {
 		return "index";
 	}
 	
-	//display the page to create shifts
+	//display the jsp where you can create shifts
 	@RequestMapping("/create-shift")
 	public String showCreateShift(Model model) {
 		
@@ -68,7 +68,6 @@ public class EmployeeHomeController {
 		
 		//if id is null, add to master schedule
 		if (id == "") {
-			System.out.println("1 -->" + id);
 			//find Master schedule and create shift to be added
 			Employee master = service.getEmployee("634c155f245151700ec73b89");
 			List<Shift> masterSchedule = master.getSchedule();
@@ -89,12 +88,10 @@ public class EmployeeHomeController {
 			
 			model.addAttribute("employees", service.getAllEmployees());
 			model.addAttribute("shiftAdded", shiftAdded);
-			
-			System.out.println("2 -->" + id);
+		
 			return "create-shift";
 			
 		}
-		System.out.println("3 -->" + id);
 		//else add to employee's schedule
 		Employee employee = service.getEmployee(id);
 		List<Shift> employeeSchedule = employee.getSchedule();
@@ -113,6 +110,7 @@ public class EmployeeHomeController {
 		return "create-shift";
 	}
 	
+	//index with empIdAlreadyExists added to model
 	@RequestMapping("/1")
 	public String showEmployees1(Model model) {
 
@@ -359,11 +357,10 @@ public class EmployeeHomeController {
 		return "schedule";
 	}
 	
-	//weekly view for schedule
+	//weekly CALENDAR view for Employee's schedule
 	@RequestMapping("/schedule-weekly")
 	public String viewWeeklyEmployeeSchedule(Model model, @RequestParam(required = false) String id,
 			@RequestParam(required = false) String date) {
-		
 		
 		model.addAttribute("employee", service.getEmployee(id));
 		model.addAttribute("firstname", service.getEmployee(id).getFirstname());
@@ -459,6 +456,74 @@ public class EmployeeHomeController {
 				model.addAttribute("curDayMonthString", monthNumToString(today.getMonthValue()));
 		return "schedule-weekly";
 	}
+	
+	//displays a list of one weeks worth of MASTER schedule
+	@RequestMapping("/weekly-calendar-list")
+	public String displayWeeklyCalendarList(Model model, @RequestParam(required=false) String id,
+			@RequestParam(required=false) String date, @RequestParam(required=false) Integer day) {
+		
+		model.addAttribute("employee", service.getEmployee("634c155f245151700ec73b89"));
+		model.addAttribute("firstname", service.getEmployee("634c155f245151700ec73b89").getFirstname());
+		if (service.getEmployee("634c155f245151700ec73b89").getSchedule() != null) {
+			model.addAttribute("totalHours", service.getEmployee("634c155f245151700ec73b89").getTotalHours());
+		}
+		// If page is entered with no params (clicking on weekly view instead of either
+				// of the arrows)
+				LocalDate today;
+				int dayNum;
+				if (date == null) {
+					today = LocalDate.now();
+					dayNum = calculateDayOfWeek(Integer.parseInt(today.toString().substring(8,10)),Integer.parseInt(today.toString().substring(5,7)), Integer.parseInt(today.toString().substring(0,4)));
+					model.addAttribute("dayNum", dayNum);
+				} else {
+					today = LocalDate.parse(date);
+					dayNum = calculateDayOfWeek(Integer.parseInt(today.toString().substring(8,10)),Integer.parseInt(today.toString().substring(5,7)), Integer.parseInt(today.toString().substring(0,4)));
+					model.addAttribute("dayNum", dayNum);
+				}
+				date = today.toString();
+				String displayToday = LocalDate.now().toString();
+				model.addAttribute("displayToday", displayToday);
+				
+				// Stores the numbers to be printed for the current week
+				List<LocalDate> dates = new ArrayList<LocalDate>(7);
+				HashMap<String, ArrayList<Shift>> shifts = new HashMap<>();
+				//List<Shift> shifts = new ArrayList<>();
+				// determines the day num of the current day, so that we can determine how many
+				// days to backpedal in order to point at sunday
+				int dayOffset = calculateDayOfWeek(today.getDayOfMonth(), today.getMonthValue(), today.getYear());
+				today = today.minusDays(dayOffset);
+
+				// Used for printing the correct day numbers of this week on the jsp
+				for (int i = 0; i < 7; i++) {
+					dates.add(today);
+					today = today.plusDays(1);
+				}
+				String nextDay = LocalDate.parse(date).plusDays(1).toString();
+				//shifts = service.listAllShiftsByTimeRange(date, nextDay);
+				shifts = service.getShiftsByTimeRange(displayToday, nextDay);
+				//shifts = service.listShiftsByTimeRangeAndId(dates.get(0).toString(), dates.get(dates.size() -1).toString(), "634c155f245151700ec73b89");
+				
+				// Set today to the first day of this week
+				today = today.minusDays(7);
+				model.addAttribute("curWeekDate", today);
+				model.addAttribute("curWeekMonthString", monthNumToString(today.getMonthValue()));
+				// Set today to next weeks date
+				today = today.plusDays(7);
+				model.addAttribute("nextWeekDate", today.toString());
+				// Set today to last weeks date
+				today = today.minusDays(14);
+				model.addAttribute("prevWeekDate", today.toString());
+				// Day numbers to be printed
+				model.addAttribute("dates", dates);
+				model.addAttribute("shifts", shifts);
+				
+				// Set today to curDay for daily info section
+				today = LocalDate.parse(date);
+				model.addAttribute("curDayDate", today);
+				model.addAttribute("curDayMonthString", monthNumToString(today.getMonthValue()));
+		
+		return "weekly-calendar-list";
+	}
 
 	//deletes a given shift
 	@RequestMapping("/remove")
@@ -467,7 +532,7 @@ public class EmployeeHomeController {
 		return "redirect:/schedule?id=" + id;
 	}
 
-	//adds a shift to either the Master Schedule or an employee's schedule
+	//the jsp that adds a shift to either the Master Schedule or an employee's schedule
 	@GetMapping("/add-shift")
 	public String displayAddShift(Model model, @RequestParam(required = false) String id) {
 		Employee employee = service.getEmployee(id);
@@ -736,7 +801,7 @@ public class EmployeeHomeController {
 		return "weekly-calendar";
 	}
 	
-	//view shift details
+	//view a single shift's details
 	@RequestMapping("/shift-details")
 	public String displayShiftDetails(Model model, @RequestParam String id,
 			@RequestParam String shiftId) {
@@ -754,7 +819,7 @@ public class EmployeeHomeController {
 		
 	}
 	
-	//show shift edit form
+	//show the shift edit jsp/form
 	@RequestMapping("/shift-edit")
 	public String displayShiftEdits(Model model, @RequestParam String id,
 			@RequestParam String shiftId) {
@@ -773,7 +838,6 @@ public class EmployeeHomeController {
 	}
 	
 	//helper methods to calculate dates
-	
 	private static int calculateDayOfWeek(int day, int month, int year) {
 		// Source:
 		// https://artofmemory.com/blog/how-to-calculate-the-day-of-the-week/
@@ -816,7 +880,6 @@ public class EmployeeHomeController {
 
 	/**
 	 * Return the number of days in the given month
-	 * 
 	 * @param monthNum the number of the month [1-12]
 	 * @param year     the year in gregorian calendar (eg. 2022)
 	 * @return the number of days in the given month
@@ -862,6 +925,7 @@ public class EmployeeHomeController {
 			return "Invalid month";
 		}
 	}
+	
 	// helper method to make sure month is always 2 digits (required by API call)
 		public String monthToString(Integer month) {
 			if (month.toString().length() == 1) {
@@ -871,7 +935,7 @@ public class EmployeeHomeController {
 			return month.toString();
 		}
 
-		// helper method to make sure day is always 2 digits (required by API call)
+	// helper method to make sure day is always 2 digits (required by API call)
 		public String dayToString(Integer day) {
 			if (day.toString().length() == 1) {
 				String newDay = "0" + day;

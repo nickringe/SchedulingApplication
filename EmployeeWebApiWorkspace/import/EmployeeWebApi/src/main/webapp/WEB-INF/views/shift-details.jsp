@@ -26,6 +26,7 @@
 		</div>
 		
 		<div class="boxCenterText"><br>
+			<div class="bold">Employee:</div>${shift.shiftOwner} <br><br>
 			<div class="bold">Shift Name:</div>${shift.shiftName} <br><br>
 			<div class="bold">Date:</div>${shift.dateString} <br><br>
 			<div class="bold">Shift Time:</div>${shift.startTimeString} - ${shift.endTimeString} <br><br>

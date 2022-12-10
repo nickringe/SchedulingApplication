@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 		<link rel="stylesheet" href="styles.css">
 		<script src="https://kit.fontawesome.com/aa77e8e357.js"	crossorigin="anonymous"></script>
-		<title>Employee Schedule - Weekly</title>
+		<title>Employee Schedule - Weekly Calendar</title>
 		</head>
 	<body>
 		<header class="header">
@@ -22,7 +22,7 @@
 			<a href="/create-shift" class="btn btn-info">Create New Shifts</a>
 			<a href="/add-employee" class="btn btn-info">Add Employee</a> <br><br>
 			<div class="text-center"><h3>${shiftRemoved}</h3></div>
-			<h2><a href="/schedule?id=${prevId}&date=${curDayDate}"><i class="fas fa-caret-left"></i></a>Schedule for ${employee.firstname} ${employee.lastname} <a href="/schedule?id=${nextId}&date=${curDayDate}"><i class="fas fa-caret-right"></i></a></h2>
+			<h2><a href="/schedule-weekly?id=${prevId}&date=${curDayDate}"><i class="fas fa-caret-left"></i></a>Schedule for ${employee.firstname} ${employee.lastname} <a href="/schedule-weekly?id=${nextId}&date=${curDayDate}"><i class="fas fa-caret-right"></i></a></h2>
 		</div>
 		<div class="child">
 			<a href="/schedule?id=${employee.id}&date=${curDayDate}" class="btn btn-info">List View</a> &nbsp;
@@ -59,13 +59,13 @@
 			<table class="table table-bordered">
 				<!-- Table Header (row 6) -->
 				<tr>
-					<th style="width: 14%">Sunday</th>
-					<th style="width: 14%">Monday</th>
-					<th style="width: 14%">Tuesday</th>
-					<th style="width: 14%">Wednesday</th>
-					<th style="width: 14%">Thursday</th>
-					<th style="width: 14%">Friday</th>
-					<th style="width: 14%">Saturday</th>
+					<th style="width: 14%" class="cal">Sunday</th>
+					<th style="width: 14%" class="cal">Monday</th>
+					<th style="width: 14%" class="cal">Tuesday</th>
+					<th style="width: 14%" class="cal">Wednesday</th>
+					<th style="width: 14%" class="cal">Thursday</th>
+					<th style="width: 14%" class="cal">Friday</th>
+					<th style="width: 14%" class="cal">Saturday</th>
 				</tr>
 
 				<!-- Week -->
