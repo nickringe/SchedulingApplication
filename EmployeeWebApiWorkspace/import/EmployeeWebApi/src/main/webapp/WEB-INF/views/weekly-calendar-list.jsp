@@ -75,19 +75,22 @@
 					<th>Edit</th>
 					<th>Delete</th>
 				</tr>
-				
-				<c:forEach var="shift" items="${shifts}">
-					<tr>
-					
-						<td><a href="/shift-details?id=${employee.id }&shiftId=${shift.id}">${shift.dateString}</a></td>
+
+							<br>
+							<%-- <c:set var="dateString" value="${date.toString()}"></c:set>
+							<c:forEach var="shift" items="${shifts[dateString]}">
+					 --%>
+						<c:forEach var="shift" items="${shiftsList}">
+						<tr>
+						<td><a href="/shift-details?id=${shift.shiftOwnerId }&shiftId=${shift.id}">${shift.dateString}</a></td>
 						<td>${shift.shiftName}</td>
 						<td>${shift.startTimeString}</td>
 						<td>${shift.endTimeString}</td>
 						<td>${shift.shiftLength}</td>
-						<td><a href="/shift-edit?id=${employee.id}&shiftId=${shift.id}" class="btn btn-info">Edit</a></td>
-						<td>
+						<td><a href="/shift-edit?id=${shift.shiftOwnerId}&shiftId=${shift.id}" class="btn btn-info">Edit</a></td>
+						 <td>
 							<form action="/confirm-delete-shift">
-								<input type="hidden" value="${employee.id }" name="id" id="id">
+								<input type="hidden" value="${shift.shiftOwnerId }" name="id" id="id">
 								<input type="hidden" value="${shift.id }" name="shiftId" id="shiftId">
 								<input type="hidden" value="${shift.shiftName }" name="shiftName" id="shiftName">
 								<input type="hidden" value="${shift.dateString }" name="date" id="date">
@@ -97,8 +100,9 @@
 							<input type="submit" value="Delete" class="btn btn-danger">
 							</form>
 						</td> 
-					</tr>
-				</c:forEach>
+					 </tr>
+				</c:forEach> 
+
 			</table>	
 		</c:if>
 		

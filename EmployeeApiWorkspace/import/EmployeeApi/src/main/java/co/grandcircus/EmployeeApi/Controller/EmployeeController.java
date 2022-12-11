@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.fasterxml.jackson.databind.util.TypeKey;
+
 import org.springframework.web.bind.annotation.*;
 
 import co.grandcircus.EmployeeApi.EmployeeNotFoundException;
@@ -212,24 +215,33 @@ public class EmployeeController {
 	
 	//returns a HASH MAP of all employees shifts based on start/end time
 	@GetMapping("/shiftlist/{start}/{end}")
-	public HashMap<String, ArrayList<Shift>> getShiftsBetweenTimes(String start, String end) {
-		System.out.println(start);
+	public HashMap<String, ArrayList<Shift>> getShiftsBetweenTimes(@PathVariable("start")String start, @PathVariable("end") String end) {
+		
 		List<Employee> employeeList = repo.findAll();
 		HashMap<String, ArrayList<Shift>> shiftList = new HashMap<>();
-		System.out.println("HERE: " + LocalDate.parse(start).plusDays(1).toString());
-		String nextDay = LocalDate.parse(start).plusDays(1).toString();
 		
 		for(Employee employee : employeeList) {
 			for(Shift shift : employee.getSchedule()) {
-				System.out.println("LD.parse shift.getstarttime: " + LocalDate.parse(shift.getStartTime()));
-				System.out.println("LD.parse start: " + LocalDate.parse(start));
-				if (LocalDate.parse(shift.getStartTime()).isEqual(LocalDate.parse(start))
-						|| (LocalDate.parse(shift.getStartTime()).isAfter(LocalDate.parse(start))
-								&& LocalDate.parse(shift.getEndTime()).isBefore(LocalDate.parse(nextDay)))) {
-					shiftList.put(start, new ArrayList<Shift>());
+				//Put the current shift in the list contained under the startDate key
+				if(!shiftList.containsKey(start.toString())) {
+					shiftList.put(start.toString(), new ArrayList<Shift>());
+					
+				}
+				if (LocalDate.parse(shift.getDate()).isEqual(LocalDate.parse(start))) {
+					shiftList.get(start.toString()).add(shift);	
+					System.out.println("added");
 				}
 			}
 		}
+//	for(String key : shiftList.keySet()) {
+//		System.out.println("key: " + key.toString());
+//	}
+//	for(ArrayList<Shift> value : shiftList.values()) {
+//		for (Shift shift : value) {
+//			System.out.println("value: " + shift.getShiftName() + shift.getDate());
+//		}
+//	}
+//		
 		
 		return shiftList;
 	}

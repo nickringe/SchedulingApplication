@@ -68,6 +68,7 @@ public class EmployeeService {
 		return response;
 	}
 	
+	//weekly calendar view for Employee's schedule
 	public HashMap<String, ArrayList<Shift>> getShiftsByTimeRangeAndId(String start, String end, String id){
 		String url = baseUrl + "/shift/" + start + "/" + end + "/" + id;
 		
@@ -79,13 +80,7 @@ public class EmployeeService {
 		return response;
 	}
 	
-	public ArrayList<Shift> listShiftsByTimeRangeAndId(String start, String end, String id) {
-		String url = baseUrl + "/shiftlist/" + start + "/" + end + "/" + id;
-		@SuppressWarnings("unchecked")
-		ArrayList<Shift> response = request.getForObject(url, ArrayList.class);
-		return response;
-	}
-	
+	//want this one to return a list of ALL shifts for ALL employees in a given day
 	public HashMap<String, ArrayList<Shift>> listAllShiftsByTimeRange(String start, String end) {
 		String url = baseUrl + "/shiftlist/" + start + "/" + end;
 		
@@ -96,6 +91,16 @@ public class EmployeeService {
 		HashMap<String, ArrayList<Shift>> response = request.exchange(request1, responseType).getBody();
 		return response;
 	}
+	
+	//returns a list of ALL shifts for one employee in a given week
+	public ArrayList<Shift> listShiftsByTimeRangeAndId(String start, String end, String id) {
+		String url = baseUrl + "/shiftlist/" + start + "/" + end + "/" + id;
+		@SuppressWarnings("unchecked")
+		ArrayList<Shift> response = request.getForObject(url, ArrayList.class);
+		return response;
+	}
+	
+
 
 	
 	
