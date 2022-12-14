@@ -10,6 +10,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -462,22 +464,23 @@ public class EmployeeHomeController {
 	public String displayWeeklyCalendarList(Model model, @RequestParam(required=false) String id,
 			@RequestParam(required=false) String date, @RequestParam(required=false) Integer day) {
 		
-		model.addAttribute("employee", service.getEmployee("634c155f245151700ec73b89"));
-		model.addAttribute("firstname", service.getEmployee("634c155f245151700ec73b89").getFirstname());
-//		if (service.getEmployee("634c155f245151700ec73b89").getSchedule() != null) {
-//			model.addAttribute("totalHours", service.getEmployee("634c155f245151700ec73b89").getTotalHours());
-//		}
 		// If page is entered with no params (clicking on weekly view instead of either
 				// of the arrows)
 				LocalDate today;
-				int dayNum;
+				Integer dayNum;
 				if (date == null) {
 					today = LocalDate.now();
 					dayNum = calculateDayOfWeek(Integer.parseInt(today.toString().substring(8,10)),Integer.parseInt(today.toString().substring(5,7)), Integer.parseInt(today.toString().substring(0,4)));
+					String dayOfWeek = LocalDate.parse(today.toString()).getDayOfWeek().toString();
+					dayOfWeek = dayOfWeek.substring(0,1) + dayOfWeek.substring(1, dayOfWeek.length()).toLowerCase() + " " + today.format(DateTimeFormatter.ofPattern("MM-dd-yy"));
+					model.addAttribute("dayOfWeek", dayOfWeek);
 					model.addAttribute("dayNum", dayNum);
 				} else {
 					today = LocalDate.parse(date);
 					dayNum = calculateDayOfWeek(Integer.parseInt(today.toString().substring(8,10)),Integer.parseInt(today.toString().substring(5,7)), Integer.parseInt(today.toString().substring(0,4)));
+					String dayOfWeek = LocalDate.parse(today.toString()).getDayOfWeek().toString();
+					dayOfWeek = dayOfWeek.substring(0,1) + dayOfWeek.substring(1, dayOfWeek.length()).toLowerCase() + " " + today.format(DateTimeFormatter.ofPattern("MM-dd-yy"));
+					model.addAttribute("dayOfWeek", dayOfWeek);;
 					model.addAttribute("dayNum", dayNum);
 				}
 				date = today.toString();
@@ -507,13 +510,13 @@ public class EmployeeHomeController {
 						System.out.println("added shift" + shift.getShiftName());
 					}
 				}
+				//sorts list by start time
+				ArrayList<Shift> sortedDates = (ArrayList<Shift>) shiftsList
+						.stream().sorted(Comparator.comparing(Shift::getStartTime))
+						.collect(Collectors.toList());
 				model.addAttribute("shiftsList", shiftsList);
-				System.out.println("--------");
-				System.out.println("today.toString(): " + today.toString());
-				System.out.println("date.toString(): " + date.toString());
-				System.out.println("nextDay: " + nextDay);
-				
-				
+				model.addAttribute("sortedDates", sortedDates);
+			
 				// Set today to the first day of this week
 				today = today.minusDays(7);
 				model.addAttribute("curWeekDate", today);
@@ -527,7 +530,13 @@ public class EmployeeHomeController {
 				// Day numbers to be printed
 				model.addAttribute("dates", dates);
 				model.addAttribute("shifts", shifts);
+				//Day names to be printed
+				ArrayList<String> weekDays = new ArrayList<>();
+				weekDays.add("Sunday");weekDays.add("Monday");weekDays.add("Tuesday");weekDays.add("Wednesday");weekDays.add("Thursday");weekDays.add("Friday");weekDays.add("Saturday");
+				model.addAttribute("weekDays", weekDays);
 				
+				String active = "active";
+				model.addAttribute("active", active);
 				// Set today to curDay for daily info section
 				today = LocalDate.parse(date);
 				model.addAttribute("curDayDate", today);
@@ -788,7 +797,13 @@ public class EmployeeHomeController {
 		}
 		
 		shifts = service.getShiftsByTimeRange(dates.get(0).toString(), dates.get(dates.size() -1).toString());
-	
+		for (Entry<String, ArrayList<Shift>> shift  : shifts.entrySet()) {
+			//sorts list by start time
+			ArrayList<Shift> sortedDates = (ArrayList<Shift>) shift.getValue()
+					.stream().sorted(Comparator.comparing(Shift::getStartTime))
+					.collect(Collectors.toList());
+			shifts.put(shift.getKey(), sortedDates);
+		}
 
 		// Set today to the first day of this week
 		today = today.minusDays(7);

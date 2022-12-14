@@ -26,7 +26,7 @@
 		<br>
 		<h2 class="text-center">Weekly Schedule - Calendar</h2>
 		<div class="child">
-			<a href="/weekly-calendar-list" class="btn btn-info">List View</a> &nbsp;
+			<a href="/weekly-calendar-list?date=${curDayDate }" class="btn btn-info">List View</a> &nbsp;
 			<a href="#0" class="btn btn-primary active">Weekly View</a> &nbsp;
 			<a href="/create-shift" class="btn btn-success">Add Shift</a>
 		</div> 

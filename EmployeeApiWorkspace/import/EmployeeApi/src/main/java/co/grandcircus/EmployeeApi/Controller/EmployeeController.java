@@ -229,10 +229,11 @@ public class EmployeeController {
 				}
 				if (LocalDate.parse(shift.getDate()).isEqual(LocalDate.parse(start))) {
 					shiftList.get(start.toString()).add(shift);	
-					System.out.println("added");
 				}
 			}
 		}
+		
+		//uncomment to see the key values being added to shiftList
 //	for(String key : shiftList.keySet()) {
 //		System.out.println("key: " + key.toString());
 //	}

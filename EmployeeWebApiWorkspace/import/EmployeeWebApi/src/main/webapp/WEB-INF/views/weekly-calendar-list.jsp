@@ -26,14 +26,13 @@
 		</div>
 		<div class="child">
 			<a href="#0" class="btn btn-primary active">List View</a> &nbsp;
-			<a href="/weekly-calendar" class="btn btn-info">Weekly View</a> &nbsp;
+			<a href="/weekly-calendar?date=${curDayDate}" class="btn btn-info">Weekly View</a> &nbsp;
 			<a href="/create-shift" class="btn btn-success">Add Shift</a>
 		</div> 
 		<br><br>
 		<div class ="child">Search by Date:</div>
 		<div class ="child">
-			<form action="" class="form-group">
-				<input type="hidden" value="${employee.id }" name="id" id="id">
+			<form action="/weekly-calendar-list" class="form-group">
 				<input type="date" name="date" id="date" required>
 				<input type="submit" value="Search" class="btn btn-info active">
 			</form>
@@ -41,33 +40,31 @@
 		
 		<div class="month-navigation">
 
-			<a id="prevButton" href="#0"><i
+			<a id="prevButton" href="weekly-calendar-list?date=${prevWeekDate}"><i
 				class="fa-solid fa-arrow-left"></i></a>&nbsp;
 
 			<!-- Gets current month and year as a String -->
 			<div>
 				Week of: ${curWeekMonthString} ${curWeekDate.dayOfMonth} ${curWeekDate.year}&nbsp;<br>
-				<div class="child"><a href="#0" title="Go to Today"><i class="fa-solid fa-calendar-check"></i></a></div>
+				<div class="child"><a href="/weekly-calendar-list" title="Go to Today"><i class="fa-solid fa-calendar-check"></i></a></div>
 			</div>
 
-			<a id="nextButton" href="#0"><i
+			<a id="nextButton" href="/weekly-calendar-list?date=${nextWeekDate}"><i
 				class="fa-solid fa-arrow-right"></i></a>
 
 		</div>
-				<div class="child">
-					<a href="#0" class="btn1 btn-primary ">Sunday</a> &nbsp;
-					<a href="#0" class="btn1 btn-primary ">Monday</a> &nbsp;
-					<a href="#0" class="btn1 btn-primary ">Tuesday</a> &nbsp;
-					<a href="#0" class="btn1 btn-primary ">Wednesday</a> &nbsp;
-					<a href="#0" class="btn1 btn-primary ">Thursday</a> &nbsp;
-					<a href="#0" class="btn1 btn-primary ">Friday</a> &nbsp;
-					<a href="#0" class="btn1 btn-primary ">Saturday</a>&nbsp;
-					</div>
-			<div class="child"><h4>${dayNum}</h4></div>
-			<c:if test="${not empty employee.schedule}">
+				<div class="childCenter">
+					<c:forEach var="date" varStatus="status" items="${dates}" begin="0" end="6" step="1">
+						<a href="/weekly-calendar-list?date=${date}" class="btn1 btn-primary <c:if test="${status.index == 3}">active</c:if>">
+							${weekDays[status.index]}
+						</a> &nbsp;
+					</c:forEach>
+				</div>
+			<div class="child"><h4>${dayOfWeek}</h4></div>
+			
 			<table class="table">
 				<tr>
-					<th>Date:</th>
+					<th>Employee:</th>
 					<th>Shift Name:</th>
 					<th>Start Time:</th>
 					<th>End Time:</th>
@@ -76,13 +73,9 @@
 					<th>Delete</th>
 				</tr>
 
-							<br>
-							<%-- <c:set var="dateString" value="${date.toString()}"></c:set>
-							<c:forEach var="shift" items="${shifts[dateString]}">
-					 --%>
-						<c:forEach var="shift" items="${shiftsList}">
+						<c:forEach var="shift" items="${sortedDates}">
 						<tr>
-						<td><a href="/shift-details?id=${shift.shiftOwnerId }&shiftId=${shift.id}">${shift.dateString}</a></td>
+						<td><a href="/shift-details?id=${shift.shiftOwnerId }&shiftId=${shift.id}">${shift.shiftOwner}</a></td>
 						<td>${shift.shiftName}</td>
 						<td>${shift.startTimeString}</td>
 						<td>${shift.endTimeString}</td>
@@ -104,7 +97,6 @@
 				</c:forEach> 
 
 			</table>	
-		</c:if>
 		
 
 	</body>
