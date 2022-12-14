@@ -32,12 +32,12 @@
 
 		<table class="table">
 			<tr>
-				<th class="text-center">Name</th>
-				<th class="text-center">Email</th>
-				<th class="text-center">Employee ID</th>
-				<th class="text-center">View Schedule</th>
-				<th class="text-center">Update</th>
-				<th class="text-center">Delete</th>
+				<th class="calCenter">Name</th>
+				<th class="calCenter">Email</th>
+				<th class="calCenter">Employee ID</th>
+				<th class="calCenter">View Schedule</th>
+				<th class="calCenter">Update</th>
+				<th class="calCenter">Delete</th>
 
 			</tr>
 
