@@ -31,7 +31,7 @@ public class EmployeeHomeController {
 	private EmployeeService service;
 
 	//displays all employees on the home page
-	@RequestMapping("/")
+	@RequestMapping("/employees")
 	public String showEmployees(Model model) {
 		
 		ArrayList<Employee> sortedList = new ArrayList<>();
@@ -42,12 +42,19 @@ public class EmployeeHomeController {
 		
 		model.addAttribute("sortedList", sortedList);
 		model.addAttribute("employees", service.getAllEmployees());
-		return "index";
+		return "employees";
 	}
 	
 	//display the jsp where you can create shifts
 	@RequestMapping("/create-shift")
-	public String showCreateShift(Model model) {
+	public String showCreateShift(Model model, @RequestParam(required = false) String id,
+			@RequestParam(required = false) String shiftName, @RequestParam(required = false) String date,
+			@RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime) {
+		
+		if(!(shiftName == null)) {
+			String shiftAdded = shiftName + " Shift added on " + date;
+			model.addAttribute("shiftAdded", shiftAdded);
+		}
 		
 		ArrayList<Employee> sortedList = new ArrayList<>();
 		for (Employee employee : service.getAllEmployees()) {
@@ -66,7 +73,6 @@ public class EmployeeHomeController {
 			@RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime) {
 		
 		String shiftAdded = shiftName + " Shift added on " + date;
-		System.out.println("-->" + id);
 		
 		//if id is null, add to master schedule
 		if (id == "") {
@@ -90,6 +96,14 @@ public class EmployeeHomeController {
 			
 			model.addAttribute("employees", service.getAllEmployees());
 			model.addAttribute("shiftAdded", shiftAdded);
+			
+			ArrayList<Employee> sortedList = new ArrayList<>();
+			for (Employee employee : service.getAllEmployees()) {
+				sortedList.add(employee);
+			}
+			Collections.sort(sortedList, Comparator.comparing(Employee::getLastname));
+			
+			model.addAttribute("sortedList", sortedList);
 		
 			return "create-shift";
 			
@@ -107,6 +121,13 @@ public class EmployeeHomeController {
 		
 		service.updateEmployee(id, employee);
 		
+		ArrayList<Employee> sortedList = new ArrayList<>();
+		for (Employee emp : service.getAllEmployees()) {
+			sortedList.add(emp);
+		}
+		Collections.sort(sortedList, Comparator.comparing(Employee::getLastname));
+		
+		model.addAttribute("sortedList", sortedList);
 		model.addAttribute("employees", service.getAllEmployees());
 		model.addAttribute("shiftAdded", shiftAdded);
 		return "create-shift";
@@ -126,7 +147,7 @@ public class EmployeeHomeController {
 	@RequestMapping("/delete")
 	public String deleteEmployee(@RequestParam String id) {
 		service.deleteEmployee(id);
-		return "redirect:/";
+		return "redirect:/employees";
 	}
 
 	//add a new employee
@@ -217,10 +238,10 @@ public class EmployeeHomeController {
 				shift.setShiftLength((double) ChronoUnit.HOURS.between(LocalDateTime.parse(date+"T"+startTime), LocalDateTime.parse(date+"T"+endTime)));
 				employee.setSchedule(employeeSchedule);
 				service.updateEmployee(id, employee);
-				return "redirect:/";
+				return "redirect:/employees";
 			}
 		}
-		return "redirect:/";
+		return "redirect:/employees";
 	}
 
 	//updates Employee Info
@@ -268,7 +289,7 @@ public class EmployeeHomeController {
 					employee.setEmergencyPhone(emergencyPhone);
 				}
 		service.updateEmployee(id, employee);
-		return "redirect:/";
+		return "redirect:/employees";
 	}
 
 	//returns a list of ALL shifts for one employee in a given week

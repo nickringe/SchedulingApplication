@@ -18,7 +18,7 @@ pageEncoding="ISO-8859-1"%>
 		</header>
 	<br>
 		<div class="text-center">
-			<a href="/" class="btn btn-info">Home</a>
+			<a href="/employees" class="btn btn-info">Employees</a>
 			<a href="" class="btn btn-primary active">View Open Shifts</a>	
 			<a href="/create-shift" class="btn btn-info">Create New Shifts</a>
 			<a href="/add-employee" class="btn btn-info">Add Employee</a> <br><br>

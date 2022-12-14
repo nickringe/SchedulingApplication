@@ -17,21 +17,14 @@
 		</header>
 	<br>
 		<div class="text-center">
-			<a href="/" class="btn btn-info">Home</a>
+			<a href="/employees" class="btn btn-info">Employees</a>
 			<a href="/weekly-calendar" class="btn btn-info">View Schedule</a>	
 			<a href="/create-shift" class="btn btn-info">Create New Shifts</a>
 			<a href="/add-employee" class="btn btn-info">Add Employee</a> <br><br>
 			<div class="child"><a href="/schedule?id=${employee.id}" class="btn btn-primary">Back to ${employee.firstname}'s Schedule</a></div>
 			<h2>Pick up a new shift for ${employee.firstname} ${employee.lastname}</h2>
 		</div>
-		
-			<%-- 	Select a time range to see open shifts.<br>
-					<form action="/search" method="get">
-						<input type="hidden" name="id" id="id" value="${employee.id}">
-						From:<input type="datetime-local" name="searchStart" id="searchStart" required><br>
-						To: <input type="datetime-local" name="searchEnd" id="searchEnd" required><br>
-						<input type="submit" value="Search">
-					</form> --%>
+	
 		<br>	
 		<h4>Open Shifts:</h4>
 			<c:forEach var="master" items="${master }">
