@@ -55,7 +55,7 @@
 		</div>
 				<div class="childCenter">
 					<c:forEach var="date" varStatus="status" items="${dates}" begin="0" end="6" step="1">
-						<a href="/weekly-calendar-list?date=${date}" class="btn1 btn-primary <c:if test="${status.index == 3}">active</c:if>">
+						<a href="/weekly-calendar-list?date=${date}" class="btn1 btn-primary">
 							${weekDays[status.index]}
 						</a> &nbsp;
 					</c:forEach>
