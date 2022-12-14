@@ -507,7 +507,6 @@ public class EmployeeHomeController {
 				for(ArrayList<Shift> value : shifts.values() ) {
 					for(Shift shift : value) {
 						shiftsList.add(shift);
-						System.out.println("added shift" + shift.getShiftName());
 					}
 				}
 				//sorts list by start time

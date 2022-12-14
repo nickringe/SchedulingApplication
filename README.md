@@ -1,5 +1,5 @@
 # SchedulingApplication
-Java, Spring Boot, MongoDB, REST Api employee scheduling web application
+Java, Spring Boot, MongoDB, REST Api employee scheduling web application.
 
 This is a post-bootcamp side project that I am building to help keep my my skills expanding.
 
